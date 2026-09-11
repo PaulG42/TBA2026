@@ -1,0 +1,1322 @@
+<title>Projet 8a</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#EBEDEF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11151A" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Projet 8a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#EBEDEF; --surface:#FFFFFF; --surface2:#E2E6EA; --border:#CCD3D9;
+  --text:#141A1F; --dim:#5B666F; --faint:#8C959D;
+  --accent:#AC442A; --accent-soft:#F2DDD5; --accent-line:#D9714F;
+  --ok:#2C7A58; --ok-soft:#D7ECE1; --warn:#A8731A; --danger:#B93B2C;
+  --data:#1D6B70; --data2:#8A5A9B;
+  --shadow:0 1px 2px rgba(20,26,31,.06),0 8px 24px rgba(20,26,31,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#11151A; --surface:#191F26; --surface2:#232B34; --border:#2D3742;
+    --text:#E7EDF2; --dim:#8B98A4; --faint:#6A7681;
+    --accent:#E0714A; --accent-soft:#3A2018; --accent-line:#E0714A;
+    --ok:#4FB88C; --ok-soft:#16301F; --warn:#D6A23F; --danger:#E4705F;
+    --data:#4FB2B8; --data2:#B08CC4;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11151A; --surface:#191F26; --surface2:#232B34; --border:#2D3742;
+  --text:#E7EDF2; --dim:#8B98A4; --faint:#6A7681;
+  --accent:#E0714A; --accent-soft:#3A2018; --accent-line:#E0714A;
+  --ok:#4FB88C; --ok-soft:#16301F; --warn:#D6A23F; --danger:#E4705F;
+  --data:#4FB2B8; --data2:#B08CC4;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:Archivo,system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overscroll-behavior-y:contain}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+#app{max-width:600px;margin:0 auto;padding:0 14px calc(84px + env(safe-area-inset-bottom))}
+
+/* ---- header ---- */
+header{position:sticky;top:0;z-index:40;background:var(--bg);
+  padding:calc(10px + env(safe-area-inset-top)) 0 8px;
+  border-bottom:1px solid var(--border)}
+.hrow{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.brand{font-weight:800;letter-spacing:-.02em;font-size:19px}
+.brand span{color:var(--accent)}
+.hmeta{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.track{height:4px;background:var(--surface2);border-radius:99px;margin-top:9px;overflow:hidden;display:flex;gap:1px}
+.track i{flex:1;background:var(--border);border-radius:1px}
+.track i.p{background:var(--accent-line)}
+.track i.cur{background:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+
+/* ---- generic ---- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  margin-top:12px;overflow:hidden;box-shadow:var(--shadow)}
+.card.pad{padding:16px}
+h2{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+  font-weight:700;margin:22px 0 0}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:99px;
+  background:var(--surface2);color:var(--dim)}
+.tag.acc{background:var(--accent-soft);color:var(--accent)}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.dot{width:6px;height:6px;border-radius:99px;background:currentColor}
+
+/* ---- session ---- */
+.shead{padding:15px 16px;display:flex;flex-direction:column;gap:8px;
+  border-bottom:1px solid var(--border)}
+.stitle{font-size:20px;font-weight:700;letter-spacing:-.02em;text-wrap:balance;line-height:1.2}
+.srow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sgoal{font-size:13.5px;color:var(--dim);margin:0}
+.blk{border-bottom:1px solid var(--border)}
+.blk:last-child{border-bottom:none}
+.blkh{padding:11px 16px 5px;font-size:11px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--faint);display:flex;justify-content:space-between}
+.ex{display:flex;gap:11px;padding:9px 16px 11px;align-items:flex-start}
+.chk{flex:0 0 24px;height:24px;margin-top:1px;border:1.5px solid var(--border);border-radius:7px;
+  background:var(--surface2);display:grid;place-items:center;transition:.14s}
+.chk svg{width:14px;height:14px;stroke:var(--surface);stroke-width:3;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.5);transition:.14s}
+.ex.done .chk{background:var(--ok);border-color:var(--ok)}
+.ex.done .chk svg{opacity:1;transform:scale(1)}
+.ex.done .exl{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--faint)}
+.exb{flex:1;min-width:0}
+.exl{font-weight:600;font-size:14.5px;line-height:1.35;display:block;text-align:left}
+.exd{font-size:13px;color:var(--dim);margin-top:4px;display:none;text-align:left;
+  border-left:2px solid var(--accent-line);padding-left:10px}
+.ex.open .exd{display:block}
+.exi{font-size:12.5px;color:var(--accent);font-weight:600;margin-top:3px;display:block;text-align:left}
+.inl{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.inl input{width:70px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:6px 8px;font-family:'JetBrains Mono',monospace;font-size:13px}
+.inl input:focus{outline:2px solid var(--accent-line);outline-offset:-1px}
+.unit{align-self:center;font-size:12px;color:var(--faint)}
+.mini{padding:6px 10px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);
+  font-size:12px;font-weight:600}
+.mini:active{background:var(--accent-soft)}
+
+.btn{display:block;width:100%;padding:14px;border-radius:12px;background:var(--accent);
+  color:#fff;font-weight:700;font-size:15px;letter-spacing:.01em;margin-top:12px}
+.btn:active{filter:brightness(.92)}
+.btn.ghost{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.btn.done{background:var(--ok)}
+
+/* ---- fields ---- */
+.field{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:12px 16px;border-bottom:1px solid var(--border)}
+.field:last-child{border-bottom:none}
+.field label{font-size:14px;font-weight:600}
+.field .sub{font-size:12.5px;color:var(--dim);font-weight:400;margin-top:2px}
+.field input,.field select{background:var(--surface2);border:1px solid var(--border);
+  border-radius:9px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:14px;
+  width:120px;text-align:right}
+.slider{width:100%;accent-color:var(--accent);margin-top:6px}
+
+/* ---- week ---- */
+.day{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);align-items:flex-start}
+.day:last-child{border-bottom:none}
+.day.today{background:var(--accent-soft)}
+.dnum{flex:0 0 42px;text-align:center}
+.dnum b{display:block;font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;line-height:1}
+.dnum s{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);text-decoration:none;margin-top:3px;font-weight:600}
+.dbody{flex:1;min-width:0}
+.dbody b{display:block;font-size:14.5px;font-weight:600;line-height:1.3}
+.dbody span{font-size:12.5px;color:var(--dim)}
+.stripe{flex:0 0 3px;align-self:stretch;border-radius:99px;background:var(--border)}
+
+/* ---- charts ---- */
+canvas{display:block;width:100%;height:auto}
+.legend{display:flex;gap:14px;padding:0 16px 14px;font-size:12px;color:var(--dim);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.stat{background:var(--surface);padding:14px 10px;text-align:center}
+.stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:700;letter-spacing:-.03em}
+.stat s{display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--dim);text-decoration:none;margin-top:4px;font-weight:600}
+
+/* ---- nav ---- */
+nav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--surface);
+  border-top:1px solid var(--border);display:flex;
+  padding:6px 0 calc(6px + env(safe-area-inset-bottom));
+  backdrop-filter:blur(12px)}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;
+  font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint)}
+nav button svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+nav button.on{color:var(--accent)}
+
+/* ---- timer ---- */
+#timer{position:fixed;inset:0;z-index:100;background:var(--bg);display:none;
+  flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px}
+#timer.on{display:flex}
+#tphase{font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--dim)}
+#tbig{font-family:'JetBrains Mono',monospace;font-size:clamp(80px,26vw,132px);font-weight:700;
+  letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums}
+#tsub{font-size:14px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+#timer.work #tbig{color:var(--accent)}
+#timer.rest #tbig{color:var(--data)}
+.tbtns{display:flex;gap:10px;margin-top:26px;width:100%;max-width:330px}
+.tbtns button{flex:1;padding:15px;border-radius:12px;background:var(--surface2);
+  border:1px solid var(--border);font-weight:700;font-size:14px}
+.ring{width:min(74vw,290px);aspect-ratio:1;position:relative;display:grid;place-items:center}
+.ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:5;stroke-linecap:round}
+.ring .bgc{stroke:var(--surface2)}
+.ring .fg{stroke:var(--accent);transition:stroke-dashoffset .25s linear}
+#timer.rest .ring .fg{stroke:var(--data)}
+.tin{display:grid;place-items:center;gap:2px}
+
+.note{font-size:13px;color:var(--dim);padding:0 16px 14px;margin:0}
+.warnbox{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:12px;
+  padding:13px 15px;margin-top:12px;font-size:13.5px;line-height:1.5}
+.warnbox b{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:5px}
+.phasebox{padding:14px 16px}
+.phasebox h3{margin:0 0 4px;font-size:16px;font-weight:700;letter-spacing:-.01em}
+.phasebox p{margin:0;font-size:13.5px;color:var(--dim)}
+.pill{display:flex;gap:6px;padding:0 0 4px;overflow-x:auto;margin-top:12px;scrollbar-width:none}
+.pill::-webkit-scrollbar{display:none}
+.pill button{flex:0 0 auto;padding:7px 13px;border-radius:99px;border:1px solid var(--border);
+  background:var(--surface);font-size:13px;font-weight:600;white-space:nowrap}
+.pill button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent-line);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="app">
+  <header>
+    <div class="hrow">
+      <div class="brand">Projet <span>8a</span></div>
+      <div class="hmeta" id="hmeta"></div>
+    </div>
+    <div class="track" id="htrack"></div>
+  </header>
+  <main id="view"></main>
+</div>
+
+<nav id="nav"></nav>
+
+<div id="timer">
+  <div id="tphase">Repos</div>
+  <div class="ring">
+    <svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="46"></circle>
+    <circle class="fg" cx="50" cy="50" r="46" id="tring"></circle></svg>
+    <div class="tin"><div id="tbig">00</div><div id="tsub"></div></div>
+  </div>
+  <div class="tbtns">
+    <button id="tskip">Passer</button>
+    <button id="tstop">Fermer</button>
+  </div>
+</div>
+<script>
+/* ============ DONNÉES PROGRAMME ============ */
+const DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+const DSH=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+
+const NW=9;
+const TBA={d:'2026-11-14',name:'Team Boulder Arena 5',lieu:'Climbing District Buttes-Chaumont, Paris'};
+const PHASES=[
+ {n:1,from:1,to:2,name:'Remise en charge',goal:"Deux semaines pour remonter la charge sur les doigts sans rien casser et rouvrir les styles que le dévers ne travaille jamais. Tu ne cherches pas à performer, tu prépares le bloc de force qui suit."},
+ {n:2,from:3,to:5,name:'Force maximale',goal:"Trois semaines de charges lourdes au Tindeq, priorité absolue sur les doigts, deux séances de salle par semaine. C'est le seul moment du cycle où tu peux encore gagner des kilos, et c'est court : chaque séance du lundi compte double."},
+ {n:3,from:6,to:7,name:'Bascule compétition',goal:"Les doigts passent en entretien, la salle prend le relais. Deux simulations complètes au format TBA, samedi 24 octobre à Paris et samedi 31 octobre chez toi. Ce que ces deux journées révèlent vaut plus que n'importe quelle séance de force du mois précédent."},
+ {n:4,from:8,to:9,name:'Affûtage et compétition',goal:"Volume divisé par deux, plus rien de lourd, aucun nouveau stimulus. Tout ce que tu peux encore gagner ici, c'est de la fraîcheur. Samedi 14 novembre, Buttes-Chaumont."}
+];
+const phaseOf=w=>PHASES.find(p=>w>=p.from&&w<=p.to)||PHASES[3];
+const isDeload=w=>w===8;
+const CONTEST={d:'2026-10-04',w:3};
+const isContestDay=(w,d)=>d===6&&w===CONTEST.w;
+const isSimDay=(w,d)=>d===5&&(w===6||w===7);
+const isTbaDay=(w,d)=>d===5&&w===NW;
+
+/* ---- briques réutilisables ---- */
+const WU_SALLE={name:'Échauffement (20 min, non négociable)',items:[
+ {id:'wu1',l:'Cardio léger 5 min',d:"Corde à sauter, montées de genoux, rameur. Tu dois avoir chaud et légèrement transpirer. Avec ton genou, évite les sauts répétés au début : privilégie le rameur ou le vélo."},
+ {id:'wu2',l:'Mobilité épaules, poignets, hanches 4 min',d:"Dislocations au bâton ou à la serviette, cercles de poignets, 90/90 hanche, squat profond tenu 30 s."},
+ {id:'wu3',l:'Élastique doigts, 2x20 flexion/extension',d:"Ça amène du sang dans les poulies et réveille les extenseurs. C'est cet exercice qui fait la différence sur le long terme post-blessure."},
+ {id:'wu4',l:'Progression sur bacs et réglettes larges',d:"Sur le mur : cinq mouvements sur gros bacs, puis cinq sur prises moyennes, puis cinq sur réglettes larges. Tu n'as pas ton Tindeq en salle, c'est le mur qui sert d'échauffement progressif. Si ça tire dans une poulie, tu prolonges au lieu de continuer."},
+ {id:'wu5',l:'6 blocs faciles',d:"Du 6a au 6c, concentration exclusive sur les pieds et le placement du bassin. Aucun mouvement violent, aucune réception sautée."}
+]};
+const MOB_QUOT={name:'Mobilité quotidienne (12 min)',items:[
+ {id:'m1',l:'Respiration + cat-cow, 1 min',d:"Cinq respirations lentes puis dix cycles dos rond, dos creux. Ça réveille la charnière lombaire avant tout le reste."},
+ {id:'m2',l:'90/90 hanche avec lifts, 2x30s par côté',d:"Assis, une jambe devant à 90°, l'autre sur le côté à 90°. Tu décolles activement le genou du sol quelques secondes. C'est la rotation de hanche qui te manque pour les drop knees."},
+ {id:'m3',l:'Pigeon actif, 2x45s par côté',d:"Tu ne restes pas passif : tu pousses le tibia dans le sol 5 s, tu relâches 10 s, tu répètes. Beaucoup plus efficace que tenir la position sans rien faire."},
+ {id:'m4',l:'Jefferson curl à vide, 3x5 lents',d:"Debout, tu déroules vertèbre par vertèbre vers le sol, puis tu remontes de la même façon. 10 secondes par répétition. Sans charge, uniquement l'amplitude."},
+ {id:'m5',l:'Dislocations épaules au bâton, 2x10',d:"Prise large sur un balai, bras tendus, tu passes de l'avant vers l'arrière. Tu resserres la prise au fil des semaines."},
+ {id:'m6',l:'Suspension passive à la barre, 2x30s',d:"Épaules relâchées puis actives. Bon pour les épaules et pour décomprimer le dos."},
+ {id:'m7',l:'Squat profond tenu, 60s',d:"Talons au sol, coudes qui poussent les genoux vers l'extérieur. Si le genou tire à l'avant, réduis la profondeur, c'est le SFP qui parle."}
+]};
+const MOB_ECART={name:'Mobilité écart et hanche (15 min, 2 fois par semaine)',items:[
+ {id:'e1',l:'Grenouille PAILs/RAILs, 2 cycles',d:"À quatre pattes genoux écartés. Tu tiens la position basse 2 min, puis tu pousses les genoux dans le sol à 30 % pendant 10 s (PAILs), puis tu tires activement les genoux vers l'intérieur sans bouger 10 s (RAILs), puis tu regagnes de l'amplitude. C'est ce protocole qui débloque vraiment une hanche raide."},
+ {id:'e2',l:'Écart latéral tenu, 3x60s',d:"Appuis sur les mains, tu descends jusqu'au seuil de tension supportable. Respire, ne rebondis jamais."},
+ {id:'e3',l:'Copenhague adducteurs, 3x20s par côté',d:"Sur le côté, jambe du dessus posée sur une chaise, tu soulèves le bassin. Version genou fléchi pour commencer. Renforce l'écart au lieu de juste l'étirer."},
+ {id:'e4',l:'Rotation externe de hanche debout, 2x10 par côté',d:"Debout appui sur un mur, tu montes le genou et tu ouvres la hanche vers l'extérieur, lentement. C'est le mouvement du drop knee."},
+ {id:'e5',l:'Dorsiflexion cheville au mur, 3x10 par côté',d:"Genou vers le mur sans décoller le talon. Directement utile pour tes pieds en escalade et pour le genou."}
+]};
+
+/* ---- rééducation genou : 6 semaines SFP ---- */
+const KNEE_MOB={name:'Mobilité genou et pied (8 min, tous les jours)',items:[
+ {id:'k1',l:'Étirement avant de hanche (psoas), 2x30s par côté',d:"Fente, genou arrière au sol sur une serviette. Bassin vers l'avant, dos droit, ne cambre pas."},
+ {id:'k2',l:'Rotation douce de hanche, 2x30s par côté',d:"Allongé sur le dos, genou vers la poitrine puis ouverture vers l'extérieur. Lent, sans forcer."},
+ {id:'k3',l:'Dorsiflexion au mur, 10 par côté',d:"Pied à 10 cm du mur, genou vers le mur sans décoller le talon."},
+ {id:'k4',l:'Étirement du mollet, 2x30s par côté',d:"Mains au mur, jambe arrière tendue, talon au sol, pieds droits."},
+ {id:'k5',l:'Serviette avec les orteils, 1 à 2 min par pied',d:"Assis, tu ramasses une serviette avec les orteils seuls. Chiant mais ça reconstruit la voûte plantaire."}
+]};
+const KNEE_RULES="Douleur jusqu'à 3-4/10 pendant l'exercice : acceptable. Au-delà, tu arrêtes. Le lendemain le genou doit être revenu à son état habituel, sinon tu fais une pause d'un jour et tu reprends au niveau de la semaine précédente. Gonflement, blocage ou genou qui lâche : tu arrêtes tout et tu appelles ton kiné.";
+
+const KNEE_REEDUC=[
+ {t:'Rééducation genou S1 : premiers pas',note:"Objectif : découvrir les exercices et voir comment le genou réagit. Ne cherche pas à en faire plus.",ex:[
+  {id:'r1',l:'Contraction genou tendu, 3x5 de 30s',d:"Assis, jambe tendue sur une chaise. Tu serres le devant de la cuisse comme pour écraser un coussin sous le genou, sans bouger la jambe. La cuisse doit durcir, pas de douleur vive."},
+  {id:'r2',l:'Pont fessier, 3x10',d:"Sur le dos, genoux pliés, talons au sol, avant-pied vers le ciel. Tu serres les fesses et tu montes le bassin. C'est la fesse qui pousse, pas le bas du dos."},
+  {id:'r3',l:'Mini-squat contre un mur, 3x10',d:"Dos au mur, pieds légèrement avancés. Descente très douce sur petite amplitude. Les genoux restent dans l'axe des pieds."}]},
+ {t:'Rééducation genou S2 : montée en charge',note:"On ajoute les mollets et on complique le pont fessier.",ex:[
+  {id:'r1',l:'Pont fessier pied surélevé, 3x8 par jambe',d:"Un pied sur une marche ou un livre épais. Si c'est trop dur, tu restes au pont fessier classique."},
+  {id:'r2',l:'Clamshell élastique, 3x12 par côté',d:"Sur le côté, genoux pliés, élastique AU-DESSUS du genou (pas en dessous). Ouverture du genou du dessus sans bouger le bassin. Le mouvement vient de la hanche, pas du dos qui roule en arrière."},
+  {id:'r3',l:'Mini-squat au mur un peu plus profond, 3x12',d:"Descends un peu plus bas si la semaine 1 était indolore. Un seul paramètre à la fois."},
+  {id:'r4',l:'Montée sur pointes, 3x12',d:"Deux jambes, appui léger sur une chaise. Descente lente, c'est elle qui compte."}]},
+ {t:'Rééducation genou S3 : travail unilatéral',note:"On passe sur une jambe et on ajoute de l'équilibre. Appui autorisé.",ex:[
+  {id:'r1',l:'Squat unilatéral partiel avec appui, 3x8 par jambe',d:"Main sur un mur. Flexion d'un genou sur petite amplitude, l'autre jambe se lève légèrement devant. Tu augmenteras l'amplitude les semaines suivantes."},
+  {id:'r2',l:'Montée sur step bas (5-10 cm), 3x8 par jambe',d:"Tu montes avec une jambe et tu redescends doucement du même côté. La descente est la partie qui travaille."},
+  {id:'r3',l:'Abduction de hanche allongé, 3x12 par côté',d:"Sur le côté, jambe du dessous pliée, celle du dessus tendue qui monte. Avec élastique c'est mieux. Le buste reste stable."},
+  {id:'r4',l:'Équilibre sur une jambe, 3x30s par jambe',d:"Près d'un support. Regarde un point fixe devant toi."}]},
+ {t:'Rééducation genou S4 : amplitude et contrôle',note:"Plus de hauteur, plus d'amplitude, travail latéral de hanche.",ex:[
+  {id:'r1',l:'Fentes courtes, 3x8 par jambe',d:"Petit pas en avant, descente modérée. Le genou avant reste au-dessus de la cheville. Dos droit, bassin rétroversé."},
+  {id:'r2',l:'Montée sur step hauteur normale, 3x10 par jambe',d:"Marche d'escalier classique. Contrôle toujours la descente, ne te laisse pas tomber."},
+  {id:'r3',l:'Marche latérale élastique, 2x10 pas par côté',d:"Élastique aux chevilles ou au-dessus des genoux, position semi-fléchie. Hanches à la même hauteur pendant tout le mouvement."},
+  {id:'r4',l:'Équilibre une jambe + mouvement de bras, 3x30s par jambe',d:"Tu bouges les bras ou tu tournes la tête pendant l'équilibre. Reste près d'un appui."}]},
+ {t:'Rééducation genou S5 : contrôle à la descente',note:"La descente, c'est le moment le plus sensible du SFP (escaliers, pente). C'est la semaine clé.",ex:[
+  {id:'r1',l:'Step-down contrôlé, 3x8 par jambe',d:"Sur une marche basse, tu descends très lentement une jambe vers le sol sans que le pied touche complètement, puis tu remontes. Le plus lentement possible, c'est tout l'intérêt."},
+  {id:'r2',l:'Squat unilatéral amplitude augmentée, 3x10 par jambe',d:"Avec appui si besoin. N'augmente l'amplitude que si les semaines précédentes n'ont rien déclenché."},
+  {id:'r3',l:'Montée sur pointe une jambe, 3x8 par jambe',d:"Appui léger au mur. Descente du talon très lente."},
+  {id:'r4',l:'Équilibre yeux fermés, 3 à 4 essais par jambe',d:"3 à 5 secondes les yeux fermés, toujours à portée d'un support."}]},
+ {t:'Rééducation genou S6 : circuit de consolidation',note:"Circuit, 2 tours. Dernière semaine du protocole kiné, ensuite on passe au renfo global.",ex:[
+  {id:'r1',l:'Squat unilatéral, 8-10 par jambe',d:"Amplitude que tu tolères bien."},
+  {id:'r2',l:'Step-down contrôlé, 8 par jambe',d:"Comme en semaine 5."},
+  {id:'r3',l:'Fentes courtes, 8-10 par jambe',d:"Comme en semaine 4."},
+  {id:'r4',l:'Pont fessier ou abduction de hanche, 10-12 par côté',d:"Celui que tu préfères des deux."},
+  {id:'r5',l:'Montée sur pointe une jambe, 8-10 par jambe',d:"Comme en semaine 5."},
+  {id:'r6',l:'Gainage sur avant-bras et genoux, 3x20-30s',d:"Corps aligné, ventre gainé, respiration normale."}]}
+];
+/* ---- renfo membres inférieurs : 6 semaines, élastique + 2 haltères 10 kg ---- */
+const KNEE_RENFO=[
+ {t:'Renfo jambes S1 : technique',note:"Objectif : apprendre le mouvement, pas charger. Un seul haltère si besoin, voire aucun.",ex:[
+  {id:'g1',l:'Squat gobelet, 2-3x10-12 charge légère',d:"Haltère à deux mains contre la poitrine. Genoux dans la direction des pieds, talons au sol.",tr:'kg'},
+  {id:'g2',l:'Soulevé de terre roumain, 2-3x10-12 léger',d:"Un haltère dans chaque main, fesses en arrière, dos plat, jambes presque tendues, jusqu'à l'étirement des ischios. Ce ne sont pas les lombaires qui travaillent.",tr:'kg'},
+  {id:'g3',l:'Fente arrière, 2-3x8-10 par jambe',d:"Grand pas en arrière, deux genoux à 90°. Le genou avant reste au-dessus de la cheville. Sans charge ou un seul haltère."},
+  {id:'g4',l:'Marche latérale élastique, 2x10 pas par côté',d:"Élastique au-dessus des genoux, position squat à 120°, buste penché, dos droit. Hanches à la même hauteur."},
+  {id:'g5',l:'Montée sur pointes, 2-3x12-15',d:"Un haltère dans chaque main le long du corps. Descente lente."}]},
+ {t:'Renfo jambes S2 : volume',note:"Le mouvement est acquis, on augmente les répétitions.",ex:[
+  {id:'g1',l:'Squat gobelet, 3x12-15',d:"Comme la semaine précédente. Si c'est facile, garde l'haltère plus longtemps contre la poitrine.",tr:'kg'},
+  {id:'g2',l:'Soulevé de terre roumain, 3x12-15',d:"Identique, plus de répétitions.",tr:'kg'},
+  {id:'g3',l:'Fente arrière, 3x10 par jambe',d:"Avec un haltère dans chaque main si le mouvement est maîtrisé."},
+  {id:'g4',l:'Abduction de hanche debout élastique, 3x12-15 par côté',d:"Élastique aux chevilles, appui sur un mur. La jambe tendue part sur le côté sans reposer le pied entre les répétitions."},
+  {id:'g5',l:'Montée sur pointes, 3x15',d:"Descente toujours lente."}]},
+ {t:'Renfo jambes S3 : charge',note:"Les deux haltères de 10 kg sur les mouvements principaux, moins de répétitions.",ex:[
+  {id:'g1',l:'Squat 2 haltères, 3-4x8-10',d:"Un haltère de 10 kg dans chaque main le long du corps. Plus lourd égale plus lent et plus contrôlé. Les genoux ne rentrent surtout pas vers l'intérieur.",tr:'kg'},
+  {id:'g2',l:'Soulevé de terre roumain charge complète, 3-4x8-10',d:"Les deux haltères. Si le dos se courbe, tu réduis la charge ou l'amplitude.",tr:'kg'},
+  {id:'g3',l:'Fente arrière chargée, 3x8-10 par jambe',d:"Un haltère de 10 kg dans chaque main."},
+  {id:'g4',l:'Pont fessier chargé, 3x10-12',d:"Haltère sur le bassin tenu à deux mains. Ligne droite épaules-genoux, pas plus haut, bassin rétroversé."},
+  {id:'g5',l:'Montée sur pointes chargée, 3x12-15',d:"Un haltère dans chaque main."}]},
+ {t:'Renfo jambes S4 : unilatéral',note:"Une jambe à la fois : plus exigeant pour l'équilibre et le contrôle.",ex:[
+  {id:'g1',l:'Fente bulgare, 3x8-10 par jambe',d:"Dessus du pied arrière sur une chaise. Commence sans charge pour trouver l'équilibre, puis un haltère dans chaque main.",tr:'kg'},
+  {id:'g2',l:'Soulevé de terre roumain une jambe, 3x8 par jambe',d:"Un haltère (ou deux), en appui sur une jambe, la jambe libre part en arrière. Un doigt sur le mur si l'équilibre manque.",tr:'kg'},
+  {id:'g3',l:'Step-up chargé, 3x8-10 par jambe',d:"Poussée sur le talon à la montée, descente lente du même côté. Un haltère dans chaque main."},
+  {id:'g4',l:'Clamshell élastique, 3x15 par côté',d:"Élastique au-dessus des genoux, bassin immobile."},
+  {id:'g5',l:'Montée sur pointe une jambe, 3x10 par jambe',d:"Haltère dans la main du même côté si toléré."}]},
+ {t:'Renfo jambes S5 : tempo',note:"Descente ralentie sur les mouvements principaux. Plus dur sans ajouter de poids.",ex:[
+  {id:'g1',l:'Squat tempo, 3-4x6-8, 4s de descente',d:"Deux haltères de 10 kg, quatre secondes comptées à la descente, remontée normale. Le tempo compte plus que le nombre de répétitions.",tr:'kg'},
+  {id:'g2',l:'Soulevé de terre roumain tempo, 3-4x6-8',d:"3 à 4 secondes à la descente.",tr:'kg'},
+  {id:'g3',l:'Fente bulgare tempo, 3x6-8 par jambe',d:"3 secondes à la descente."},
+  {id:'g4',l:'Pont fessier une jambe chargé, 3x8-10 par jambe',d:"Une seule jambe au sol, l'autre tendue en l'air. Réduis la charge pour garder le contrôle."},
+  {id:'g5',l:'Marche latérale élastique renforcée, 3x12 pas par côté',d:"Élastique aux chevilles pour plus de résistance."}]},
+ {t:'Renfo jambes S6 : circuit bilan',note:"Circuit, 2 tours. Compare tes sensations à celles de la première semaine.",ex:[
+  {id:'g1',l:'Squat 2 haltères, 10',d:"Comme la semaine 3.",tr:'kg'},
+  {id:'g2',l:'Soulevé de terre roumain, 10',d:"Comme la semaine 3.",tr:'kg'},
+  {id:'g3',l:'Fente bulgare ou step-up, 8 par jambe',d:"Celui que tu préfères."},
+  {id:'g4',l:'Pont fessier chargé, 12',d:"Semaine 3 ou semaine 5 selon ta forme."},
+  {id:'g5',l:'Marche latérale élastique, 10 pas par côté',d:""},
+  {id:'g6',l:'Montée sur pointes, 15',d:""}]}
+];
+const KNEE_MAINT={t:'Entretien jambes (circuit, 2 tours)',note:"Tu as fini les 12 semaines de protocole. Ici c'est du maintien, 2 fois par semaine suffisent.",ex:[
+  {id:'g1',l:'Squat 2 haltères, 3x10',d:"Charge que tu maîtrises parfaitement.",tr:'kg'},
+  {id:'g2',l:'Soulevé de terre roumain, 3x10',d:"",tr:'kg'},
+  {id:'g3',l:'Fente bulgare, 3x8 par jambe',d:""},
+  {id:'g4',l:'Step-down contrôlé, 2x8 par jambe',d:"Tu gardes cet exercice à vie, c'est le meilleur assureur anti-SFP."},
+  {id:'g5',l:'Marche latérale élastique, 2x10 pas',d:""}]};
+</script>
+<script>
+/* ---- montage Tindeq (traction au sol) ---- */
+const TINDEQ_SETUP={name:'Montage du Tindeq (à lire une fois, puis à refaire à l\'identique)',goal:"Tout ton programme de doigts passe par des tractions au sol : zéro suspension, charge mesurée au dixième de kilo, et le geste le plus sûr qui existe pour des doigts qui reviennent de blessure.",items:[
+ {id:'s1',l:'Le montage',d:"Une sangle passée sous ton pied (ou sous les deux pieds, jambes tendues), le Tindeq accroché dessus par un mousqueton, et ta réglette 20 mm accrochée au Tindeq. Tu tires vers le haut avec une main. Le Tindeq lit exactement la force que tes doigts produisent."},
+ {id:'s2',l:'La position, c\'est la moitié du travail',d:"Debout, buste légèrement penché en avant, bras presque tendu (coude à 150° environ, comme sur une suspension), épaule active : tu tires l'omoplate vers le bas et l'arrière, tu ne laisses pas l'épaule remonter dans l'oreille. Le tirage vient des doigts et du dos, pas du biceps."},
+ {id:'s3',l:'Toujours exactement la même position',d:"C'est la seule contrainte du protocole, mais elle est absolue. Quelques centimètres de différence sur la longueur de sangle changent ton chiffre de 10 %, et tes courbes ne veulent plus rien dire. Fais un repère au marqueur sur la sangle et prends une photo de ta position le premier jour."},
+ {id:'s4',l:'Réglage de l\'app Tindeq',d:"Mode Repeaters, avec la force cible affichée à l'écran. Tu regardes la barre et tu tiens la ligne. C'est bien plus précis que d'accrocher des poids à un baudrier, et c'est le gros avantage de ta méthode par rapport à une poutre classique."},
+ {id:'s5',l:'Monte en force en 2 secondes',d:"Jamais un à-coup sec sur les doigts. Tu montes progressivement pendant 2 s, tu tiens la valeur cible, et tu relâches progressivement. C'est ce qui rend la traction au sol plus sûre qu'une suspension."},
+ {id:'s6',l:'Une main à la fois, toujours',d:"Tu alternes gauche et droite. Ça double le temps de séance mais ça règle ton asymétrie post-blessure, ce qu'une suspension à deux mains ne fera jamais."}
+]};
+const WU_MAISON={name:'Échauffement (15 min)',items:[
+ {id:'wu1',l:'Cardio léger 5 min',d:"Corde à sauter légère, montées de genoux ou marche rapide. Objectif circulation, pas performance. Avec ton genou, évite les sauts si c'est un jour sensible : rameur ou vélo."},
+ {id:'wu2',l:'Mobilité épaules et poignets 3 min',d:"Dislocations au bâton, cercles de poignets, et 2x8 scapular pull-ups suspendu à ta barre bras tendus."},
+ {id:'wu3',l:'Élastique doigts 2x20',d:"Flexion puis extension complète. Toujours avant de charger les doigts, c'est ce qui amène du sang dans les poulies."},
+ {id:'wu4',l:'Tractions Tindeq progressives, 4x8s',d:"Sur ton montage habituel : 30 %, 50 %, 65 % puis 75 % de ton MVC. 1 min de repos entre chaque, chaque main. À la maison l'échauffement doit être plus complet qu'en salle parce que tu passes directement sur du lourd sans blocs faciles avant."}
+]};
+const UPPER_PULL={name:'Renfo : tirage et gainage',items:[
+ {id:'u1',l:'Tractions, 4 séries à 2 répétitions de l\'échec',d:"Tempo lent, 2 s à la montée, 2 s à la descente, prise pronation. Si tu dépasses 12 répétitions, ajoute un sac à dos chargé."},
+ {id:'u2',l:'Front lever, progression tuck, 5x10s',d:"Suspendu, genoux à la poitrine, bassin en rétroversion, tu ramènes le corps à l'horizontale. Quand tu tiens 15 s proprement, tu déplies une jambe. Le meilleur gainage qui existe pour le dévers, et c'est exactement ce que demande un 8a sur Kilter."},
+ {id:'u3',l:'Gainage hollow body, 3x30s',d:"Bas du dos plaqué au sol, épaules et jambes décollées. Si le dos décolle, tu replies les genoux."},
+ {id:'u4',l:'Scapular pull-ups, 3x10',d:"Suspendu bras tendus, tu montes et descends les épaules sans plier les coudes. Prépare l'épaule aux gros mouvements et prévient les tendinites."}
+]};
+const UPPER_PREV={name:'Renfo : antagonistes et prévention',goal:"Le contrepoids de tout le travail de doigts. C'est ce que tout le monde saute et c'est ce qui coûte trois mois d'arrêt à tout le monde.",items:[
+ {id:'p1',l:'Extensions poignets et doigts à l\'élastique, 3x20',d:"Élastique autour des doigts, tu ouvres la main en grand contre la résistance. Le seul exercice qui équilibre vraiment les fléchisseurs surchargés."},
+ {id:'p2',l:'Rotateurs externes à l\'élastique, 3x15 par bras',d:"Coude au corps à 90°, tu ouvres l'avant-bras vers l'extérieur, lentement. Trois minutes qui t'économisent une épaule."},
+ {id:'p3',l:'Pompes ou dips, 3x12',d:"Le poussé équilibre le tiré. Rien de sophistiqué, juste de la régularité."},
+ {id:'p4',l:'Rotation externe d\'épaule chargée (cuban press), 2x12',d:"Avec un haltère de 10 kg si c'est trop lourd, prends-en un seul et allège. Mouvement lent."},
+ {id:'p5',l:'Pronation-supination avant-bras, 3x15 par bras',d:"Un haltère tenu par une extrémité, coude au corps, tu tournes l'avant-bras d'un côté puis de l'autre. Prévention directe de l'épicondylite."}
+]};
+
+/* ---- doigts au Tindeq ---- */
+function fingerBlock(w,day){
+  const p=phaseOf(w).n;
+  if(day===0){
+    if(p===1){
+      const pc=w===1?80:85;
+      return {name:'Doigts : remise en charge lourde',goal:"Deux séances pour réveiller le système avant le bloc de force. Elle se fait à froid après échauffement, jamais après une séance de salle : si tu inverses, tu tires à 85 % de ce que tu vaux et tu gardes toute la fatigue.",items:[
+        {id:'f1',l:`5 tractions de 10 s à ${pc} % du MVC, par main`,d:`Réglette 20 mm, demi-arqué strict. Environ {P${pc}}. Repos 3 min entre les séries, montre en main. Tu alternes gauche, droite, gauche, droite.`,tr:'kg',timer:'hang'},
+        {id:'f2',l:'3 tractions de 10 s en prise ouverte à 65 %',d:"Environ {P65}. Première phalange dépliée, pas de pouce. Position beaucoup plus douce pour les poulies, et c'est celle qui domine sur les prises généreuses d'ouverture commerciale, donc exactement ce qui t'attend le 14 novembre.",tr:'kg'},
+        {id:'f3',l:'Massage transverse de la cicatrice, 2 min',d:"Avant la séance, pas après. Pression ferme perpendiculaire à la poulie, sur une main chauffée. C'est du remodelage mécanique et c'est la seule chose qui fait vraiment reculer une cicatrice hypertrophiée."}
+      ]};
+    }
+    if(p===2){
+      const retest=(w===3);
+      const pc=w===3?92:w===4?95:100;
+      const ns=w===3?4:w===5?5:6;
+      return {name:retest?'Doigts : retest et force maximale':'Doigts : force maximale',goal:"Le bloc court et décisif. Trois semaines, une séance lourde par semaine, aucune marge pour en rater une. C'est ici que se gagnent les kilos qui compteront sur les blocs 12 à 20 du circuit.",items:[
+        retest?{id:'f0',l:'Retest MVC avant de charger',d:"Protocole identique aux mesures du 12 septembre, même position, même échauffement. Toutes les charges des semaines 3 à 5 se calculent sur ce chiffre. Sans ce retest tu sous-charges tout le bloc d'environ 10 %.",tr:'mvc'}:null,
+        {id:'f1',l:`${ns} tractions de 7 s à ${pc} % du MVC, par main`,d:`Environ {P${pc}}. Repos 3 min. Tu cherches le pic, pas la tenue : si le chiffre chute de plus de 10 % entre la première et la dernière série, tu arrêtes la séance là.`,tr:'kg',timer:'hang'},
+        w===5?{id:'f2',l:'Full crimp 20 mm, 2 tractions de 6 s à 75 %',d:"Environ {P75}, en toute fin de séance. C'est la position qui charge le plus ta poulie et qui tire le plus sur la cicatrice. Tu montes prudemment mais tu ne l'évites pas : c'est aussi celle qui sert sur les prises franches en fin de circuit.",tr:'kg'}:null,
+        {id:'f3',l:'2 séries de plus côté faible',d:"Uniquement si ton écart entre mains dépassait 10 % aux mesures du 12. Sinon tu sautes cette ligne."},
+        {id:'f4',l:'Règle de douleur',d:"Gêne au-dessus de 4/10 pendant l'effort, ou douleur qui persiste le lendemain matin, ou gonflement : tu redescends d'un palier. Une cicatrice qui chauffe pendant la séance et qui est calme le lendemain, c'est le signal normal du remodelage."}
+      ].filter(Boolean)};
+    }
+    if(p===3){
+      if(w===6) return {name:'Doigts : retest et vitesse de montée en force',goal:"Fin du bloc lourd. À partir d'ici les doigts passent en entretien et l'énergie part sur la salle et les simulations.",items:[
+        {id:'f0',l:'Retest MVC 20 mm et 15 mm',d:"Le bilan du bloc de force. Compare avec le 12 septembre et avec la semaine 3. Entre 6 et 12 % de gain sur cinq semaines de charge est une bonne trajectoire.",tr:'mvc'},
+        {id:'f1',l:'6 tractions explosives de 4 s, réglette 20 mm',d:"Tu tires le plus vite possible et tu regardes deux chiffres : le pic atteint et le temps mis pour arriver à 80 % de ta MVC. Cherche à descendre sous 500 ms. Repos 2 min. Sur un bloc de compétition tu as trois à quatre dixièmes de seconde pour charger une prise : ta MVC ne sert à rien si ton pic arrive en une seconde et demie.",tr:'kg'},
+        {id:'f2',l:'Arrêt si le pic chute de 15 %',d:"Travail très neural, la fatigue arrive vite et sans prévenir. Six séries propres valent mieux que dix séries molles, et tu as une simulation samedi."}
+      ]};
+      return {name:'Doigts : entretien',goal:"Séance courte et lourde, juste de quoi ne rien perdre. Simulation samedi, la fraîcheur passe avant tout le reste.",items:[
+        {id:'f1',l:'4 tractions de 7 s à 90 % du MVC, par main',d:"Environ {P90}. Repos 3 min. Vingt minutes en tout, échauffement compris. Si tu hésites entre faire cette séance et arriver frais samedi, tu la sautes.",tr:'kg',timer:'hang'},
+        {id:'f2',l:'Massage de la cicatrice, 2 min',d:"On le garde jusqu'au bout, y compris la semaine de compétition."}
+      ]};
+    }
+    return {name:'Doigts : activation',goal:"Plus aucun stimulus, uniquement du réveil neural. Charger lourd maintenant ne peut plus rien t'apporter avant le 14, ça ne peut que te coûter de la fraîcheur.",items:[
+      {id:'f1',l:`3 tractions de 5 s à ${w===8?70:60} % du MVC, par main`,d:`Environ {P${w===8?70:60}}. Repos 2 min. Ça doit être facile et court : tu sors en te disant que tu aurais pu en faire beaucoup plus. C'est exactement le but.`,tr:'kg'},
+      {id:'f2',l:'Élastique doigts et mobilité poignet',d:"Deux séries de vingt flexions-extensions. Ça amène du sang sans fatiguer."}
+    ]};
+  }
+  /* mercredi : capacité et densité */
+  if(p===1) return {name:'Doigts : densité et remodelage',goal:"La séance anti-cicatrice. Tension longue et modérée, c'est ce qui réaligne les fibres d'un cal hypertrophié. Elle reste au programme jusqu'à la fin, y compris la semaine de compétition.",items:[
+    {id:'g1',l:`5 tractions de 25 s à ${w===1?50:55} % du MVC, par main`,d:`Environ {P${w===1?50:55}}, réglette 20 mm. Repos 2 min entre les séries, 3 min entre les mains. Tu règles ton seuil sur l'app Tindeq et tu maintiens la courbe dans une fenêtre étroite. C'est long, c'est ennuyeux, et c'est exactement le stimulus qui fait tourner le collagène.`,tr:'kg'},
+    w===2?{id:'g2',l:'15 mm en prise ouverte, 4 tractions de 10 s à 70 %',d:"Environ {Q70}, calculé sur ta MVC 15 mm. Première exposition au petit réglet de ce cycle, en position ouverte uniquement.",tr:'kg'}:null,
+    {id:'g3',l:'Prise ouverte ou demi-arqué, jamais full crimp',d:"Sur toute cette séance. On charge le tissu longtemps, on ne l'agresse pas."}
+  ].filter(Boolean)};
+  if(p===2){
+    const q=w===3?80:w===4?85:90;
+    return {name:'Doigts : réglette 15 mm',goal:"Le complément de ta séance lourde du lundi, sur le format de prise le plus exigeant que tu possèdes. C'est aussi ici que se construit la capacité à recharger une petite prise plusieurs fois de suite, ce qui est exactement le problème d'un circuit de vingt blocs sans repos.",items:[
+      {id:'g1',l:`5 tractions de ${w===5?7:8} s à ${q} % de ta MVC 15 mm, par main`,d:`Environ {Q${q}}. Repos 3 min. En demi-arqué les semaines 3 et 5, en prise ouverte la semaine 4, pour couvrir les deux angles.`,tr:'kg',timer:'hang'},
+      {id:'g2',l:'Densité 20 mm, 3 tractions de 25 s à 55 %',d:"Environ {P55}, en fin de séance. Ta dose d'entretien pour la cicatrice, tu ne la sautes pas même quand la séance principale s'est bien passée.",tr:'kg'},
+      {id:'g3',l:'Repeaters si tu as encore du jus, 3 séries de 6 x (7 s / 3 s) à 60 %',d:"Optionnel, seulement si le lundi s'est bien passé. Environ {P60}. Vingt blocs enchaînés sans repos, c'est un test de répétabilité autant que de force.",timer:'rep'}
+    ]};
+  }
+  if(p===3) return {name:'Doigts : densité seule',goal:"Semaine de simulation. Le mercredi devient un entretien tissulaire, rien de plus. Tout le reste part dans la journée de samedi.",items:[
+    {id:'g1',l:'3 tractions de 25 s à 55 % du MVC, par main',d:"Environ {P55}. Repos 2 min. Quinze minutes en tout.",tr:'kg'},
+    {id:'g2',l:'Élastique doigts, 2 x 20',d:"Le contrepoids que tout le monde saute et qui coûte trois mois d'arrêt à tout le monde."}
+  ]};
+  return {name:'Doigts : circulation',goal:"Très léger. Le but est d'amener du sang dans les poulies, pas de créer la moindre fatigue.",items:[
+    {id:'g1',l:'2 tractions de 20 s à 45 % du MVC, par main',d:"Environ {P45}. Ça doit être franchement facile.",tr:'kg'},
+    {id:'g2',l:'Élastique doigts et étirements avant-bras',d:"Deux séries de vingt, puis 3 min d'étirement poignet en flexion et en extension."}
+  ]};
+}
+
+const TBA_RULES={id:'tr',l:'Rappel du format TBA',d:"Vingt blocs, quatre minutes chacun, difficulté croissante. Un seul des deux membres du binôme doit toper pour que l'équipe continue. Dès qu'un bloc est validé vous enchaînez le suivant sans aucun repos. Si les quatre minutes passent sans top, l'équipe est éliminée. Gérer le timing et la dépense d'énergie compte au moins autant que le niveau."};
+
+function simSession(w){
+  const first=(w===6);
+  return {title:first?'Simulation TBA à Paris':'Simulation TBA, format long',dur:first?'4 h':'5 à 6 h',type:'climb',blocks:[
+    {name:'Avant de partir',goal:first?"Samedi 24 octobre, Climbing District Buttes-Chaumont. C'est la salle où se déroule le TBA : même équipe d'ouverture, même style de prises, même mur, même espace restreint. Aucune autre salle ne te donnera cette information-là.":"Samedi 31 octobre, chez toi. L'objectif du jour n'est pas le style des blocs, c'est la durée et l'attente entre les vagues. Le lieu importe peu.",items:[
+      {id:'s0',l:'Venir avec ton binôme, sans exception',d:"Une simulation en solo ne teste pas ce qui compte : la répartition des essais, la communication pendant les quatre minutes, et la décision de basculer sur l'autre."},
+      {id:'s1',l:'Manger comme le jour J',d:"Petit-déjeuner normal, et de quoi grignoter toutes les 90 minutes. Une journée de qualification dure plus de dix heures, ce n'est pas le moment de découvrir que tu ne digères pas tes barres."}
+    ]},
+    {name:'Échauffement complet, 25 min',goal:"Plus long que d'habitude, comme le jour J. Un échauffement bâclé sur le bloc 1 coûte l'élimination sur le bloc 3.",items:WU_SALLE.items},
+    {name:'Le circuit',goal:"Vingt blocs, quatre minutes chacun, difficulté croissante. Vous vous appliquez les règles à la lettre, y compris l'élimination.",items:[
+      TBA_RULES,
+      {id:'s2',l:'20 blocs, 4 minutes chacun, zéro repos entre les blocs',d:"Un seul des deux doit toper. Dès que c'est validé vous enchaînez. Si les quatre minutes passent, vous notez que vous seriez éliminés et vous continuez quand même pour avoir la donnée complète.",tr:'n',timer:'bloc4'},
+      {id:'s2b',l:'Au moins 5 dalles dans les 20 blocs',d:"Et tu en prends personnellement au moins deux, même si ton binôme est meilleur dessus. Le but de la journée est de savoir ce que tu vaux en dalle sous fatigue, pas d'aller le plus loin possible dans le circuit."},
+      {id:'s3',l:"Un grimpe, l'autre conseille",d:"Celui qui ne grimpe pas lit le bloc depuis le sol et parle. C'est un rôle actif, pas une pause. Au TBA c'est souvent ce qui fait la différence dans les trente dernières secondes."},
+      first?{id:'s4',l:"Repérer l'arène et l'espace",d:"Profite d'être sur place : hauteur des blocs, espace de réception, densité. Le jour J il y aura beaucoup de monde et de la musique très fort, mais le mur, lui, sera le même.",tr:'txt'}:{id:'s4',l:'Attente longue entre les vagues',d:"Insère deux pauses de 45 minutes en plein milieu du circuit, assis, à froid. C'est exactement ce qui arrive en qualification et c'est ce qui casse les gens : redémarrer sur un bloc dur après trois quarts d'heure assis.",tr:'txt'}
+    ]},
+    {name:'Debrief immédiat',goal:"À faire sur place, avant de rentrer.",items:[
+      {id:'s5',l:'Numéro du bloc où vous vous arrêtez',d:"Le chiffre brut. C'est ta ligne de base : la deuxième simulation doit faire mieux, et le 14 novembre encore mieux.",tr:'n'},
+      {id:'s6',l:'Quel style vous a coûté le plus cher',d:"Dalle, coordination, compression, dévers puissant, sloper. Nomme-le précisément, c'est ce que tu travailleras en priorité les deux semaines suivantes.",tr:'txt'},
+      {id:'s7',l:'Décision trop lente',d:"Sur quel bloc vous avez mis trop de temps à décider qui grimpait. Cette décision doit se prendre en dix secondes le 14 novembre.",tr:'txt'}
+    ]}
+  ]};
+}
+
+function contestDay(){
+  return {title:'Contest',dur:'la journée',type:'climb',blocks:[
+    {name:'Dimanche 4 octobre',goal:"Il remplace ton circuit chronométré du dimanche, et il le remplace avantageusement : ouverture inconnue, pression réelle, enchaînement sous contrainte de temps, attente entre les tours. C'est exactement ce que tu ne peux pas fabriquer dans ta salle. À 41 jours du TBA, tu n'as rien à protéger, tu y vas pour de vrai.",items:[
+      {id:'c1',l:'Échauffement long, 25 min minimum',d:"Comme au TBA. Cardio léger, mobilité, élastique doigts, puis progression sur bacs et réglettes larges. Un premier bloc attaqué froid coûte deux blocs plus loin."},
+      {id:'c2',l:'De quoi manger toutes les 90 minutes',d:"Répétition générale de la logistique du 14 novembre. Si tu découvres aujourd'hui que tu ne digères pas tes barres, c'est une très bonne nouvelle."},
+      {id:'c3',l:'Se réchauffer après chaque attente',d:"Dix minutes de mouvement après chaque pause longue. C'est le réflexe qui sauve la journée du 14, autant l'installer maintenant."}
+    ]},
+    {name:'Ce que tu ramènes',goal:"Le contest vaut surtout par ce que tu en apprends. Remplis ça le soir même, pendant que c'est frais.",items:[
+      {id:'c4',l:'Nombre de blocs sortis, et à quel niveau ça casse',d:"Ta ligne de base en ouverture inconnue. C'est la donnée que ta salle ne peut pas te donner.",tr:'n'},
+      {id:'c5',l:'Quel style t\'a coûté le plus cher',d:"Dalle, coordination, compression, sloper, dévers puissant. Nomme-le précisément : tu as six semaines pour le corriger, et c'est le moment idéal pour l'apprendre.",tr:'txt'},
+      {id:'c6',l:'Lecture ou exécution ?',d:"Sur les blocs ratés, tu n'avais pas vu la méthode, ou tu l'avais vue et tu n'as pas pu la faire ? Les deux problèmes ne se corrigent pas du tout de la même façon, et c'est la question que la plupart des gens ne se posent jamais.",tr:'txt'},
+      {id:'c7',l:'Gestion de la journée',d:"Échauffement, alimentation, stress, attente. Note ce qui a mal marché : tu as deux simulations et une compétition pour le corriger.",tr:'txt'}
+    ]}
+  ]};
+}
+function tbaDay(){
+  return {title:'Team Boulder Arena 5',dur:'la journée',type:'climb',blocks:[
+    {name:'Samedi 14 novembre, Buttes-Chaumont',goal:"Neuf semaines de préparation convergent ici. Il n'y a plus rien à construire aujourd'hui, il n'y a qu'à exécuter ce que tu as déjà répété deux fois.",items:[
+      {id:'x1',l:'Échauffement long, 30 min minimum',d:"Commence bien avant votre vague. Cardio léger, mobilité, élastique doigts, puis progression sur bacs et réglettes larges. Le premier bloc du circuit compte autant que le vingtième."},
+      {id:'x2',l:'Manger toutes les 90 minutes',d:"Même sans faim. Sur dix heures d'attente et d'effort intermittent, l'hypoglycémie arrive sans prévenir et elle se manifeste d'abord par une lecture qui devient floue."},
+      {id:'x3',l:'Se réchauffer avant chaque vague',d:"Dix minutes de mouvement après chaque attente longue. Redémarrer à froid sur un bloc dur, c'est le scénario numéro un d'élimination et de blessure."},
+      {id:'x4',l:'La stratégie est déjà décidée',d:"Qui attaque quel style, comment vous vous parlez, quand vous basculez. Vous l'avez répétée le 24 et le 31 octobre. Aujourd'hui vous l'appliquez sans la rediscuter."}
+    ]},
+    {name:'Résultat',goal:"",items:[
+      {id:'x5',l:'Nombre de blocs enchaînés',d:"Le chiffre de la journée.",tr:'n'},
+      {id:'x6',l:"Comment ça s'est passé",d:"Écris-le le soir même, pendant que c'est frais.",tr:'txt'}
+    ]}
+  ]};
+}
+
+/* ---- course, conditionnée au genou ---- */
+function runBlock(w){
+  return {name:'Marche active et cardio doux',items:[
+   {id:'c1',l:`Marche rapide ${w<=4?35:45} min, ${w<=4?2:3} portions en côte`,d:"La course est sortie de ce cycle. La marche en côte charge le quadriceps sans l'impact, c'est ce dont ton genou a besoin, et ça construit quand même la base aérobie. Descente en marche lente et contrôlée : c'est la descente qui réveille un syndrome fémoro-patellaire, jamais la montée."},
+   {id:'c2',l:'Ou vélo, ou rameur, 30 min',d:"Zéro impact et le même bénéfice ici. Allure conversationnelle du début à la fin. Choisis ce que tu as sous la main."},
+   {id:'c3',l:'Test de tolérance : 30 sautillements sur place',d:"Une fois par semaine. Aucune douleur pendant, aucune douleur le lendemain. C'est le marqueur qui te dira quand ton genou est prêt à encaisser des réceptions de bloc répétées, et éventuellement la course si tu veux la remettre plus tard."}
+  ]};
+}
+function runBlockOld(w){
+  if(w<=6) return {name:'Course : pas encore',items:[
+   {id:'c0',l:'Tu ne cours pas avant la semaine 11',d:"Ton syndrome fémoro-patellaire est exactement la blessure que la course aggrave chez un débutant : impacts répétés, genou fléchi sous charge, quelques milliers de fois par sortie. Courir maintenant, c'est jeter les six semaines de kiné. Ces six semaines de rééducation SONT ta préparation à la course, tu ne perds pas de temps."},
+   {id:'c1',l:'Marche rapide 25 à 35 min, terrain plat',d:"À la place, deux à trois fois par semaine, allure soutenue mais conversation possible. Zéro impact, et ça construit quand même la base aérobie qui te manque complètement."}
+  ]};
+  if(w<=10) return {name:'Course : préparation à l\'impact',items:[
+   {id:'c1',l:`Marche rapide ${w<=8?35:40} min avec ${w<=8?2:3} portions en côte`,d:"La montée charge le quadriceps sans l'impact de la course. Descente en marche lente et contrôlée : c'est la descente qui réveille un SFP, jamais la montée."},
+   {id:'c2',l:'Test de tolérance : 30 sautillements sur place',d:"Une fois par semaine seulement. Aucune douleur pendant et aucune douleur le lendemain : tu progresses. Sinon tu restes en marche une semaine de plus, sans état d'âme."},
+   w===10?{id:'c3',l:'Feu vert pour courir : les 4 critères',d:"Tu ne passes en course qu'avec les quatre réunis : descendre un escalier sans douleur, 20 squats unilatéraux sans douleur, 30 sautillements indolores le jour même et le lendemain, aucune douleur en position assise prolongée. S'il en manque un seul, tu reportes de deux semaines. La course est secondaire dans ce programme, elle ne vaut pas le risque de tout casser."}:null
+  ].filter(Boolean)};
+  const k=w-10;
+  const plans={1:'8 x (1 min course / 2 min marche)',2:'8 x (90 s course / 90 s marche)',3:'6 x (2 min course / 90 s marche)',4:'Semaine allégée : 6 x (90 s / 90 s)',5:'5 x (3 min course / 90 s marche)',6:'4 x (5 min course / 2 min marche)',7:'3 x (8 min course / 2 min marche)',8:'2 x (12 min course / 3 min marche)',9:'20 min de course continue',10:'25 min de course continue',11:'Semaine allégée : 20 min continues, très facile',12:'30 min de course continue'};
+  return {name:'Course : reprise progressive',items:[
+   {id:'c1',l:plans[k]||plans[6],d:"Une à deux fois par semaine maximum, jamais la veille du vendredi ni du dimanche. Allure très facile, tu dois pouvoir parler en courant. Foulée courte et cadence élevée, autour de 170 pas par minute : c'est ce qui protège le genou, bien plus que les chaussures. 5 min de marche avant, 5 min après."},
+   {id:'c2',l:'Contrôle du genou le lendemain',d:"Genou plus douloureux le lendemain qu'avant la sortie : tu redescends d'une semaine dans le plan. La règle du kiné continue de s'appliquer même quand tu cours."},
+   {id:'c3',l:'Chaussures',d:"Si tu n'as pas de vraies chaussures de course, achète-les avant la première sortie. Seul investissement non négociable ici."}
+  ]};
+}
+
+/* ---- dalle : ton point faible, bloc dédié en début de séance du vendredi ---- */
+const SLAB_WHY={id:'sw',l:'Pourquoi la dalle passe en premier dans la séance',d:"Elle demande de la précision, et de la précision il n'y en a plus quand tu es fatigué. Elle se fait à froid juste après l'échauffement, avant les blocs limites. Elle ne coûte presque rien à tes doigts, c'est pour ça qu'elle s'ajoute au programme sans rien retirer au travail de force."};
+const SLAB_KNEE={id:'sk',l:'Chute en dalle et genou',d:"C'est le type de chute qui abîme les genoux et les chevilles : on glisse et on atterrit sans contrôle. Tu ne montes pas plus haut que ce que tu es prêt à désescalader, et tu regardes où tu vas tomber avant de t'engager."};
+function slabBlock(w){
+  const p=phaseOf(w).n;
+  if(p===1) return {name:'Dalle : faire confiance à ses pieds (20 min)',goal:"Ton point faible assumé, et paradoxalement celui qui progresse le plus vite : la dalle est de la technique de pied et de la confiance, pas de la force. L'adaptation est presque immédiate, contrairement aux doigts.",items:[
+    SLAB_WHY,
+    {id:'d1',l:'6 blocs de dalle faciles, pieds silencieux',d:"Du 5c au 6b. Aucun pied ne doit faire de bruit. Tu poses, tu charges progressivement, et tu ne quittes pas ton pied des yeux avant qu'il soit chargé. Le regard qui file vers la prise de main suivante avant que le pied soit posé est l'erreur numéro un.",tr:'n'},
+    {id:'d2',l:'Glissement volontaire, à 50 cm du sol',d:"Sur une adhérence, tu charges de plus en plus fort jusqu'à ce que le pied parte. Trois ou quatre fois, sur des inclinaisons différentes. C'est bizarre à faire et c'est l'exercice qui change tout : tant que tu ne sais pas où est la limite réelle de ta gomme, tu la sous-estimes énormément et tu grimpes crispé."},
+    {id:'d3',l:'Talons bas sur toutes les adhérences',d:"Baisser le talon augmente la surface de gomme en contact et la pression sur l'avant du chausson. C'est contre-intuitif, l'instinct dit de monter sur la pointe, et l'instinct a tort."},
+    {id:'d4',l:'Désescalader chaque bloc réussi',d:"Immédiatement après l'avoir sorti. Descendre force à regarder ses pieds et à contrôler, et ça double ton temps de contact avec le style pour zéro fatigue supplémentaire."},
+    SLAB_KNEE
+  ]};
+  if(p===2) return {name:'Dalle : précision et engagement (25 min)',goal:"Le défaut du grimpeur de dévers en dalle : tirer sur les bras, ce qui décolle le bassin du mur et fait glisser les pieds. Les deux exercices d'aujourd'hui enlèvent les bras du problème.",items:[
+    SLAB_WHY,
+    {id:'d1',l:'4 blocs de dalle en no-hands ou mains à plat',d:"Tu montes en posant seulement les paumes à plat sur le mur, sans jamais tirer sur une prise. Du 5c au 6a. C'est l'exercice qui apprend au corps que l'équilibre vient du bassin au-dessus du pied, pas de la traction.",tr:'n'},
+    {id:'d2',l:'5 rock-overs sur pied haut, sans tirer',d:"Tu poses un pied très haut et tu te relèves dessus en poussant, bras quasi tendus. Des deux côtés. C'est le mouvement de dalle par excellence et celui que tu rates probablement systématiquement.",tr:'n'},
+    {id:'d3',l:'3 blocs en pieds imposés',d:"Tu refais une dalle facile en t'interdisant la moitié des prises de pieds. Brutal pour la lecture, et ça t'oblige à utiliser du volume et de l'adhérence pure."},
+    {id:'d4',l:'Filmer un bloc que tu rates',d:"Tu verras deux choses que tu ne sens pas : ton bassin trop loin du mur, et le moment où tu hésites. L'hésitation fait glisser, parce qu'un pied chargé longtemps sans bouger finit par partir.",tr:'txt'},
+    SLAB_KNEE
+  ]};
+  if(p===3) return {name:'Dalle : lecture et engagement sous fatigue (25 min)',goal:"Tu sais maintenant tenir sur des pieds. Reste à le faire vite, du premier coup, et quand les avant-bras sont déjà entamés.",items:[
+    SLAB_WHY,
+    {id:'d1',l:'5 dalles jamais vues, un seul essai chacune',d:"Deux minutes de lecture depuis le sol, chrono, puis un essai. Tu ne repasses pas sur un raté aujourd'hui. Du 6a au 6c+ selon ce que ta salle propose.",tr:'n'},
+    {id:'d2',l:'Nommer les trois pieds clés à voix haute avant de partir',d:"Si tu n'y arrives pas depuis le sol, ta lecture n'est pas finie et tu prends trente secondes de plus. En dalle la méthode est dans les pieds, pas dans les mains."},
+    {id:'d3',l:'2 dalles en toute fin de séance, avant-bras cuits',d:"C'est là que la technique de pied se révèle vraiment : quand tu ne peux plus compenser en tirant.",tr:'n'},
+    {id:'d4',l:'Taux de flash en dalle',d:"Le chiffre à suivre sur tout le cycle. Trois sur cinq en semaine 10, quatre sur cinq en semaine 16, c'est une trajectoire correcte.",tr:'n'},
+    SLAB_KNEE
+  ]};
+  return {name:'Dalle : confiance (10 min)',goal:"Affûtage. Quatre dalles faciles pour garder la sensation, rien de plus.",items:[
+    {id:'d1',l:'4 dalles faciles, 5c à 6a+',d:"Réussies du premier coup, sans exception. La semaine avant une compétition, tu ne veux collectionner que des sensations de réussite.",tr:'n'}
+  ]};
+}
+
+/* ---- week-end de mesures, avant le début du cycle ---- */
+function baselineDay(d){
+  if(d===5) return {title:'Mesures : batterie Tindeq',dur:'75 min',type:'finger',blocks:[
+    {name:WU_MAISON.name,items:WU_MAISON.items},
+    TINDEQ_SETUP,
+    {name:'Les mesures',goal:"Samedi 12 septembre. Ces chiffres calibrent les neuf semaines qui viennent : toutes les charges du programme s'affichent en kilos à partir d'eux. Tu as cinq semaines de charge utile avant l'affûtage, autant ne pas les gâcher en travaillant à l'aveugle. Prends ton temps, cette séance ne se rattrape pas.",items:[
+      {id:'m0',l:'Poids du corps, à jeun',d:"À noter dans les réglages. Ton ratio force sur poids est l'indicateur qui compte vraiment : autour de 60 à 70 % du poids de corps sur 20 mm à une main correspond à un niveau 8a bloc. Ce sont des repères grossiers, la technique de traction fait varier ça de 10 %.",tr:'txt'},
+      {id:'m1',l:'MVC 7 s, réglette 20 mm, demi-arqué',d:"Trois essais par main, 3 min de repos. Montée en force sur 2 s, maintien du maximum 5 s. Tu gardes la meilleure valeur de chaque main, dans la position de traction que tu viens de fixer et que tu ne changeras plus de tout le cycle.",tr:'mvc'},
+      {id:'m2',l:'MVC 7 s, réglette 20 mm, prise ouverte',d:"Deux essais par main. Première phalange dépliée, pas de pouce. Plus de 15 % d'écart avec ton demi-arqué, c'est un déficit de position et pas un déficit de force, et ça se corrige vite.",tr:'kg'},
+      {id:'m3',l:'MVC 7 s, réglette 15 mm, demi-arqué',d:"Deux essais par main. Attends-toi à 10 à 20 % de moins que sur le 20 mm, c'est normal. Cette valeur sert à calculer les charges de tes séances du mercredi, elle s'enregistre directement dans les réglages.",tr:'m15'},
+      {id:'m4',l:'Pas de full crimp aujourd\'hui',d:"C'est la position qui charge le plus ta poulie et qui tire le plus sur ta cicatrice. Elle revient en semaine 5, à charge modérée, une fois que le tissu aura encaissé un mois de travail progressif. Mesurer un max en full crimp maintenant n'apporterait rien et coûterait peut-être cher."},
+      {id:'m5',l:'Critical Force, 24 répétitions de 7 s / 3 s',d:"Une main à la fois, effort maximal à chaque répétition. La moyenne des six dernières est ta Critical Force. C'est ta capacité à recharger une prise plusieurs fois de suite, et sur un 8a de planche c'est aussi décisif que le pic de force.",tr:'cf',timer:'cf'},
+      {id:'m6',l:'Écart entre tes deux mains',d:"Plus de 10 %, c'est ton côté avec la cicatrice qui parle. Dans ce cas tu ajouteras une série sur ce côté à chaque séance lourde jusqu'à la semaine 5.",tr:'txt'},
+      {id:'m7',l:'État de la cicatrice',d:"Note ce que tu ressens aujourd'hui, à froid puis après les tractions. Tu compareras dans deux mois et c'est la seule façon de savoir si le remodelage avance.",tr:'txt'}
+    ]},
+    {name:KNEE_MOB.name,items:KNEE_MOB.items}
+  ]};
+  return {title:'Mesures : baseline escalade et genou',dur:'90 min',type:'climb',blocks:[
+    {name:WU_SALLE.name,items:WU_SALLE.items},
+    {name:'Où tu en es vraiment',goal:"Dimanche 13 septembre. Séance peu exigeante pour les doigts, qui ont travaillé hier. On mesure le reste : le niveau à vue, la dalle, et le genou.",items:[
+      {id:'b1',l:'Niveau à vue : 8 blocs jamais vus, un essai chacun',d:"Du 6b au 7b, du plus facile au plus dur. Note combien tu sors au premier essai et à quelle cotation ça casse. C'est ta ligne de base, à recomparer après les simulations d'octobre.",tr:'n'},
+      {id:'b2',l:'Baseline dalle : 5 dalles à vue',d:"Le style que tu vas travailler tous les vendredis, et celui que les ouvreurs de Climbing District vont te servir le 14 novembre. Autant savoir d'où tu pars. Du 5c au 6b+, un essai chacune, et tu notes honnêtement le résultat même s'il pique.",tr:'n'},
+      {id:'b3',l:'Ce qui te fait tomber en dalle',d:"Regarde précisément : est-ce que le pied glisse, est-ce que tu n'oses pas te relever dessus, ou est-ce que tu ne vois pas l'appui depuis le sol ? Les trois problèmes ne se corrigent pas de la même façon.",tr:'txt'},
+      {id:'b4',l:'Ton meilleur niveau en dévers, 3 essais max',d:"Un seul bloc dur, pour situer. Trois essais et tu arrêtes, ce n'est pas une séance de projection.",tr:'txt'}
+    ]},
+    {name:'Baseline genou',goal:"Les quatre critères de ton kiné, mesurés aujourd'hui pour pouvoir les recomparer.",items:[
+      {id:'k1',l:'Descendre un étage d\'escalier',d:"Douleur ou pas, et à quel niveau sur 10.",tr:'txt'},
+      {id:'k2',l:'20 squats unilatéraux par jambe',d:"Amplitude atteinte sans douleur, et comparaison entre les deux jambes.",tr:'txt'},
+      {id:'k3',l:'30 sautillements sur place',d:"Douleur pendant, et surtout douleur le lendemain matin. Note les deux.",tr:'txt'}
+    ]},
+    {name:'Avant lundi',goal:"",items:[
+      {id:'p1',l:'Vérifier que l\'appli affiche des kilos',d:"Ouvre n'importe quelle séance de la semaine 1 : les charges doivent être en kilos et plus en pourcentages. Si tu vois encore des pourcentages, une MVC n'a pas été enregistrée dans les réglages."},
+      {id:'p2',l:'Repos complet lundi matin',d:"La première vraie séance est lundi 14, la force lourde au Tindeq. Deux jours de mesures, c'est déjà de la charge."}
+    ]}
+  ]};
+}
+
+/* ---- pince : bloc de fin de séance en salle, sur disques de fonte ---- */
+const PINCH_FORM={id:'pf',l:'Les deux erreurs qui annulent la moitié du bénéfice',d:"Le pouce se pose à plat sur la face du disque, jamais crocheté par la pulpe : sinon tu travailles la flexion du pouce au lieu de son adduction, et c'est l'adduction qui te manque en escalade. Et tes quatre doigts ne doivent jamais accrocher le bord du disque : dès qu'ils trouvent une arête, tu tires en arqué et tu te racontes que tu fais de la pince."};
+const PINCH_SAFE={id:'ps',l:'Montage et sécurité',d:"Deux disques face lisse contre face lisse, les faces plates vers l'extérieur. Tu soulèves à dix centimètres du sol, au-dessus d'un tapis ou d'un tas de disques, jamais au-dessus de tes pieds. Ça finit par tomber, c'est le principe de l'exercice, autant que ça tombe sur du mou. Les disques en fonte lisse sont plus durs que les bumpers en caoutchouc : ne compare pas des charges d'un type à l'autre."};
+function pinchBlock(w){
+  const p=phaseOf(w).n;
+  const large=(w%2===0);
+  const wl=large?"large, environ 6 à 7 cm : trois disques fins, ou deux disques épais":"étroite, environ 3 à 4 cm : deux disques fins";
+  const alt="La force en pince est extrêmement spécifique à l'écartement : être fort sur trois centimètres ne dit rien de ce que tu vaux sur sept, et c'est sur le large que la plupart des grimpeurs s'effondrent. Tu alternes donc les largeurs d'une semaine à l'autre.";
+  if(p===1) return {name:'Pince : apprentissage (10 min)',goal:"Ton point faible déclaré, et celui qui répond le plus vite : dans la plupart des cas la pince est faible simplement parce qu'elle n'a jamais été entraînée. Six à huit semaines de travail régulier donnent des gains visibles, ce qui n'a rien à voir avec la lenteur des adaptations en arqué. Ce mois-ci on installe la position, pas la charge.",items:[
+    PINCH_FORM,
+    {id:'p1',l:`4 tenues de 12 s par main, largeur ${wl}`,d:`Charge modérée : tu dois pouvoir tenir les 12 secondes sans que la prise glisse dans la dernière seconde. Repos 2 min. Note le poids total des disques. ${alt}`,tr:'kg'},
+    PINCH_SAFE,
+    {id:'p2',l:'Magnésie autorisée, mais pas trop',d:"Une pince qui tient uniquement grâce à la magnésie ne t'apprend rien sur ta force réelle. Mains sèches, un peu de magnésie, et si ça glisse tout de suite c'est que la charge est trop lourde."}
+  ]};
+  if(p===2) return {name:'Pince : montée en charge (12 min)',goal:"La position est acquise, on charge. La pince fatigue l'adducteur du pouce et pas les fléchisseurs des doigts, c'est pour ça qu'elle peut se placer en fin de séance sans compromettre le reste.",items:[
+    {id:'p1',l:`5 tenues de 12 s par main, largeur ${wl}`,d:`Tu montes de 1 à 2,5 kg dès que tu tiens les cinq séries proprement. Repos 2 min. ${alt}`,tr:'kg'},
+    {id:'p2',l:'Une main à la fois, toujours',d:"La pince à deux mains masque les asymétries, et en escalade tu pinces toujours d'une main. Compare tes deux côtés à chaque séance."},
+    PINCH_FORM
+  ]};
+  if(p===3) return {name:'Pince : force et capacité (14 min)',goal:"Deux formats dans la même séance : du lourd et du long. En bloc, une pince se tient rarement une seconde, elle se tient le temps de déplacer l'autre main.",items:[
+    {id:'p1',l:`4 tenues de 10 s lourdes, largeur ${wl}`,d:"La dernière seconde doit être difficile. Repos 2 min 30.",tr:'kg'},
+    {id:'p2',l:'2 tenues longues de 25 s, charge allégée de 40 %',d:"Le format capacité. C'est celui qui transfère sur les mouvements où tu dois tenir une pince pendant que tu montes un pied.",tr:'kg'},
+    {id:'p3',l:'Test : compare tes deux largeurs',d:"Une fois dans le bloc, mesure ton max sur étroit et sur large le même jour. Plus de 30 % d'écart, c'est ton large qu'il faut prioriser sur les huit semaines suivantes.",tr:'txt'}
+  ]};
+  return {name:'Pince : entretien (8 min)',goal:"Phase de projection, la priorité est ailleurs. Trois séries pour ne pas reperdre quatre mois de travail.",items:[
+    {id:'p1',l:`3 tenues de 12 s par main, largeur ${wl}`,d:"Charge confortable, 80 % de ton max. Repos 2 min.",tr:'kg'}
+  ]};
+}
+
+/* ---- mode stage : phase Kilter compressée, 4 séances, environ 4 h ---- */
+const STAGE_WU={id:'su',l:"L'échauffement ne se coupe pas",d:"C'est la seule chose qui ne se négocie pas quand tu manques de temps. Une planche attaquée sur des doigts froids avec une cicatrice hypertrophiée, c'est le scénario de blessure numéro un, et une blessure en janvier coûte tout le cycle. Quand tu es serré, tu coupes le nombre d'essais, jamais les vingt premières minutes."};
+function stageDay(w,d){
+  const proj=w>=19;
+  if(d===0) return {title:'Maison : doigts en entretien',dur:'40 min',type:'finger',blocks:[
+    {name:WU_MAISON.name,items:WU_MAISON.items},
+    {name:'Entretien',goal:"Quarante minutes, faisables un soir de semaine même chargé. À partir de janvier c'est la planche qui entraîne tes doigts, le Tindeq ne sert plus qu'à ne rien perdre et à continuer de travailler la cicatrice.",items:[
+      {id:'s1',l:'Densité 20 mm, 3 tractions de 25 s à 55 %',d:"Environ {P55}. Repos 2 min. C'est ta dose anti-cicatrice, elle coûte presque rien en fatigue et c'est la dernière chose que tu dois abandonner.",tr:'kg'},
+      {id:'s2',l:'4 tractions de 7 s à 90 %, par main',d:"Environ {P90}. Repos 3 min. Assez pour maintenir ta force maximale, pas assez pour compromettre la séance de planche du mercredi.",tr:'kg',timer:'hang'},
+      {id:'s3',l:'Élastique doigts, 2 x 20',d:"Le contrepoids. Deux minutes, tu ne le sautes pas."},
+      {id:'s4',l:'Si la semaine est vraiment ingérable',d:"Garde uniquement la densité et l'élastique, quinze minutes. C'est mieux que rien et de très loin."}
+    ]},
+    {name:KNEE_MAINT.t,goal:KNEE_MAINT.note,items:KNEE_MAINT.ex.map(e=>({...e}))}
+  ]};
+  if(d===2) return {title:proj?'Kilter : projet, séance 1':'Kilter : reprise de contact',dur:'85 min',type:'climb',blocks:[
+    {name:WU_SALLE.name,goal:"",items:[STAGE_WU,...WU_SALLE.items]},
+    proj?{name:'Projection',goal:"Première des deux séances hebdomadaires sur ton projet. Version courte : moins d'essais, mêmes repos longs. Réduire les repos pour gagner du temps est la fausse bonne idée classique, ça transforme une séance de projection en séance de fatigue.",items:[
+      {id:'a1',l:'Projet 8a, 5 à 6 essais',d:"8 min de repos entre les essais, montre en main. Cinq essais bien récupérés valent mieux que dix essais entassés.",tr:'n'},
+      {id:'a2',l:'Découper en sections plutôt qu\'en tentatives complètes',d:"Mouvements isolés, puis liaisons de deux ou trois, puis départ du bas. C'est encore plus vrai quand tu as peu de temps : huit tentatives depuis le départ ne résolvent jamais un crux."},
+      {id:'a3',l:'Point haut atteint',d:"",tr:'txt'}
+    ]}:{name:'Retrouver la planche',goal:"Nouvelle salle, nouvel accès Kilter. Deux semaines pour retrouver les codes avant d'attaquer le projet.",items:[
+      {id:'a1',l:'Fixe ton angle définitivement',d:"Choisis-le maintenant et n'en bouge plus jusqu'à la fin du cycle. Changer d'angle rend ta progression illisible.",tr:'txt'},
+      {id:'a2',l:'8 à 10 blocs entre 7a et 7b+',d:"Sous ton niveau max. Tu réhabitues tes doigts aux prises de la planche, qui n'ont rien à voir avec ce que tu as grimpé depuis septembre.",tr:'n'},
+      {id:'a3',l:'Répéter chaque bloc réussi une deuxième fois',d:"Immédiatement. C'est le moyen le plus rapide de réencoder les méthodes propres à la planche, et le plus rentable quand tu as peu de séances."}
+    ]}
+  ]};
+  if(d===3) return {title:'Mobilité et genou',dur:'20 min',type:'off',blocks:[
+    {name:'Vingt minutes, où tu veux',goal:"Le seul créneau de la semaine qui n'a pas besoin de salle ni de matériel. Fais-le au bureau si besoin.",items:[]},
+    {name:MOB_ECART.name,items:MOB_ECART.items},
+    {name:KNEE_MOB.name,items:KNEE_MOB.items}
+  ]};
+  if(d===5) return {title:proj?'Kilter : projet, séance 2':'Kilter : volume sur planche',dur:'95 min',type:'climb',blocks:[
+    {name:WU_SALLE.name,goal:"",items:[STAGE_WU,...WU_SALLE.items]},
+    proj?{name:'Projection',goal:"La séance de la semaine, celle qui porte l'objectif. Elle est le samedi parce que c'est le seul jour où une période chargée d'audit ne peut pas te la voler.",items:[
+      {id:'a1',l:'Projet 8a, 6 à 8 essais',d:"Même bloc que mercredi, 8 min de repos. Deux séances par semaine sur quatre semaines, ça fait huit sessions sur le même bloc : largement de quoi enchaîner si le choix était bon.",tr:'n'},
+      {id:'a2',l:'Filmer chaque tentative',d:"Le meilleur outil gratuit pour débloquer un crux, surtout sur les pieds et le placement du bassin."},
+      {id:'a3',l:'Un 7c+ pour finir',d:"Sur quatre semaines de projection, la motivation compte autant que la force."},
+      {id:'a4',l:'Point haut atteint',d:"",tr:'txt'}
+    ]}:{name:'Volume et repérage',goal:"Deuxième séance de reprise en main.",items:[
+      {id:'a1',l:'10 à 12 blocs entre 6c+ et 7b',d:"Sur ton angle fixé mercredi. Fluidité, pas de projection.",tr:'n'},
+      {id:'a2',l:'Repérer 3 candidats pour ton projet 8a',d:"Deux ou trois essais chacun, juste pour voir lequel te parle. Celui que tu prendras en semaine 19 est celui dont tu fais déjà quelques mouvements, pas le plus beau.",tr:'txt'}
+    ]},
+    pinchBlock(w),
+    {name:'Dalle, si la nouvelle salle en a',goal:"",items:[
+      {id:'d1',l:'3 dalles faciles en fin de séance, 10 min',d:"Pour ne pas reperdre les cinq mois de travail. C'est aussi la première chose à couper les semaines où tu es débordé, sans culpabilité.",tr:'n'}
+    ]}
+  ]};
+  return {title:'Repos',dur:'',type:'off',sub:"Mode stage. Quatre séances par semaine, environ quatre heures : doigts le lundi, planche le mercredi et le samedi, mobilité le jeudi. Le reste est du repos, et c'est délibéré.",blocks:[
+    {name:KNEE_MOB.name,items:KNEE_MOB.items}
+  ]};
+}
+
+/* ---- séances salle : vendredi (difficulté) et dimanche (volume) ---- */
+const LINKUP={id:'lk',l:'Link-ups : ton substitut au mur système',d:"Ta salle n'a ni spray wall ni planche, donc tu fabriques tes propres blocs durs : tu enchaînes deux blocs existants (le premier jusqu'au sommet, puis tu redescends en désescalade sur le second et tu le remontes), ou tu refais un bloc en t'interdisant deux prises de pieds. C'est la méthode classique pour créer de la difficulté quand l'ouverture ne suit pas, et c'est aussi ce qui te fera progresser en lecture."};
+
+/* ---- mardi : troisième séance de salle, volume et capacité ---- */
+const FLASH_SOURCES={id:'fs',l:"Où trouver des blocs que tu n'as jamais vus",d:"Tu as déjà fait 85 % de ta salle, donc la nouveauté se fabrique. Par ordre de priorité. Un, l'ouverture de la semaine : demande à l'accueil quel secteur rouvre et quel jour, et cale ta séance dessus, c'est gratuit et presque personne ne le fait. Deux, les blocs posés par ton binôme sur des prises existantes : il choisit départ, prises de mains et zone de pieds, il ne te dit rien, tu as un essai. C'est un bloc que tu n'as jamais vu, et c'est la meilleure source de toutes. Trois, les blocs connus mais modifiés : deux pieds interdits, une prise de main retirée, ou un départ déplacé. Quatre, les 15 % que tu n'as jamais faits, et ce n'est pas un hasard si tu les as évités : ce sont tes styles faibles, commence par ceux-là."};
+const FLASH_RULE={id:'fr',l:"La règle, quelle que soit la source",d:"Lecture depuis le sol, un seul essai, et tu ne repasses jamais sur un raté le jour même. Si tu n'arrives pas à réunir le compte de blocs vraiment neufs, complète avec des blocs faits il y a plus de trois mois sans aller relire ta méthode : ce n'est pas parfait, mais un bloc oublié se lit presque comme un bloc neuf."};
+const FOURXFOUR={id:'q0',l:'Le 4x4, mode d\'emploi',d:"Tu choisis 4 blocs nettement sous ton max, entre 6a et 6b+, que tu sors à coup sûr. Tu les enchaînes les quatre à la suite sans aucun repos, juste le temps de te déplacer et de brosser. Ça fait un tour. Puis 4 minutes de repos, et tu recommences, quatre tours en tout. Le dernier tour doit être moche : si tu finis frais, tes blocs sont trop faciles."};
+function tuesSession(w){
+  const p=phaseOf(w).n;
+  if(p===1) return {title:'Salle : volume à vue et capacité',dur:'90 min',type:'climb',blocks:[
+    {name:WU_SALLE.name,items:WU_SALLE.items},
+    {name:'Volume à vue',goal:"Troisième séance de salle de la semaine, entièrement dédiée au nombre de blocs vus et à la capacité à enchaîner. Elle est légère pour les doigts et lourde pour le cardio, donc elle ne mange pas sur ta séance lourde du lundi.",items:[
+      FLASH_SOURCES,FLASH_RULE,
+      {id:'q1',l:'10 blocs neufs ou reconstruits, un seul essai chacun, 6b à 7a',d:"Si le secteur vient de rouvrir tu les prends tous là. Sinon, moitié blocs neufs, moitié blocs posés par ton binôme ou modifiés. Dix suffisent, mieux vaut dix vraiment inconnus que quinze dont tu connais la moitié.",tr:'n'},
+      {id:'q2',l:'Taux de flash du jour',d:"Nombre sorti au premier essai, sur le nombre tenté. Note aussi la source, blocs neufs ou blocs posés par ton binôme, sinon tu compareras des choses différentes d'une semaine à l'autre.",tr:'n'}]},
+    {name:'Capacité : 4x4',goal:"Le format qui répond directement au problème du TBA : tu ne tombes pas au bloc 12 parce que le bloc 12 est dur, tu tombes parce que tu as enchaîné onze blocs sans repos avant lui.",items:[
+      FOURXFOUR,
+      {id:'q3',l:'3 tours seulement cette semaine',d:"On installe le format. 4 min de repos entre les tours, montre en main.",tr:'n'}]},
+    {name:MOB_ECART.name,items:MOB_ECART.items}
+  ]};
+  if(p===2) return {title:'Salle : capacité et densité d\'effort',dur:'100 min',type:'climb',blocks:[
+    {name:WU_SALLE.name,items:WU_SALLE.items},
+    {name:'Volume à vue',goal:"Même logique que la semaine précédente, avec un cran de difficulté en plus.",items:[
+      FLASH_SOURCES,
+      {id:'q1',l:'8 à 10 blocs neufs ou reconstruits, un essai chacun, 6c à 7b',d:"Plus dur que le mardi de phase 1, donc un taux de flash plus bas, c'est normal. Ne compare que des séances de même difficulté et de même source entre elles.",tr:'n'},
+      {id:'q2',l:'Demande à ton binôme de t\'en poser 4 sur mesure',d:"Et précise-lui de viser tes points faibles : dalle, coordination, compression, sloper. Un binôme qui te pose des blocs confortables ne te sert à rien. Tu lui rends la pareille sur ses propres trous.",tr:'n'}]},
+    {name:'Capacité : 4x4',goal:"Le cœur de la séance. Sur un circuit de vingt blocs enchaînés, la capacité à recharger les avant-bras après un bloc dur pèse autant que la force maximale.",items:[
+      FOURXFOUR,
+      {id:'q3',l:`4 tours, blocs entre 6a+ et 6c`,d:"4 min de repos entre les tours. Si tu finis les quatre tours proprement, tu montes d'un cran la difficulté des blocs la semaine suivante, pas le nombre de tours.",tr:'n'},
+      {id:'q4',l:'Où tu craques dans le tour',d:"Deuxième bloc du troisième tour, quatrième bloc du dernier tour : note-le. C'est la même information que celle que tu chercheras pendant les simulations.",tr:'txt'}]},
+    {name:'Une sortie hors de ta salle',goal:"",items:[
+      {id:'q6',l:'Une séance dans une autre salle, une fois dans le bloc',d:"Sur les semaines 3 à 5, cale une séance dans une salle où tu n'as jamais grimpé, en remplacement d'un mardi. C'est ta seule vraie dose d'ouverture inconnue avant la simulation du 24 octobre, et ça vaut trois séances de blocs modifiés.",tr:'txt'}]},
+    {name:'Coordination et volumes',goal:"",items:[
+      {id:'q5',l:'6 blocs en coordination, volumes ou compression',d:"Du 6b au 6c+, en fin de séance. Ce sont les styles que Climbing District ouvre le plus et ceux qu'un grimpeur de dévers voit le moins.",tr:'n'}]},
+    {name:MOB_ECART.name,items:MOB_ECART.items}
+  ]};
+  if(p===3) return {title:'Salle : entretien à vue',dur:'60 min',type:'climb',blocks:[
+    {name:WU_SALLE.name,items:WU_SALLE.items},
+    {name:'Court et facile',goal:"Semaine de simulation, la grosse journée est samedi. Le mardi devient une séance d'entretien, pas un troisième créneau d'entraînement.",items:[
+      {id:'q1',l:'10 blocs à vue, 6b à 6c+',d:"Un essai chacun, sans acharnement. Tu entretiens la lecture rapide, tu ne crées pas de fatigue.",tr:'n'},
+      {id:'q2',l:'Pas de 4x4 cette semaine',d:"La simulation de samedi est un 4x4 de cinq heures. Inutile d'en rajouter mardi."}]},
+    {name:MOB_ECART.name,items:MOB_ECART.items}
+  ]};
+  return {title:'Mobilité',dur:'25 min',type:'mob',blocks:[
+    {name:'Affûtage',goal:"Plus de troisième séance. À partir d'ici, chaque séance ajoutée te coûte de la fraîcheur sans rien te rapporter.",items:[]},
+    {name:MOB_ECART.name,goal:"Ta priorité mobilité numéro un vu ta raideur.",items:MOB_ECART.items},
+    {name:KNEE_MOB.name,items:KNEE_MOB.items}
+  ]};
+}
+
+function climbSession(w,day){
+  const p=phaseOf(w).n;
+  const D=(t,g,items)=>({name:t,goal:g,items});
+  if(day===5){ /* vendredi */
+    if(p===1) return {title:'Salle : dalle, volume et largeur de styles',dur:'120 min',blocks:[WU_SALLE,slabBlock(w),
+      D('Corps de séance',"Tu remets du mileage propre et tu rouvres les styles que le dévers ne travaille jamais. Deux séances par semaine seulement, donc chacune doit être complète.",[
+      {id:'a1',l:'28 à 32 blocs entre 6b et 7a, à vue',d:"Repos court, 1 à 2 min. Le volume de mouvement est le but. Tu prends tous les secteurs de la salle, y compris ceux que tu évites d'habitude.",tr:'n'},
+      {id:'a2',l:'Règle des pieds silencieux sur tous les blocs',d:"Aucun pied ne doit faire de bruit en se posant. Le meilleur exercice technique gratuit qui existe, et ça protège ton genou des à-coups."},
+      {id:'a3',l:'3 blocs en 7a+ en fin de séance',d:"Juste pour toucher un peu de difficulté. Tu arrêtes avant l'échec répété."}])]};
+    if(p===2&&w===CONTEST.w) return {title:'Salle : allégé, veille de contest',dur:'70 min',blocks:[WU_SALLE,slabBlock(w),
+      D('Court et fluide',"Contest dimanche. Ta séance lourde de lundi était le vrai travail de la semaine, aujourd'hui tu bouges sans t'entraîner. La tentation sera de faire une vraie séance de flash, résiste : arriver frais dimanche vaut plus que douze blocs de plus vendredi.",[
+      {id:'a1',l:'10 à 12 blocs faciles, 6a à 6c',d:"Zéro échec, zéro essai répété, aucun bloc limite.",tr:'n'},
+      {id:'a2',l:'Repérer la logistique de dimanche',d:"Horaire, format, nombre de blocs, règles de comptage. Y aller sans savoir comment on marque des points est le meilleur moyen de gâcher les deux premiers tours.",tr:'txt'}])]};
+    if(p===2) return {title:'Salle : dalle, flash et blocs limites',dur:'135 min',blocks:[WU_SALLE,slabBlock(w),
+      D('Flash : la séance que tout le monde saute',"Ton taux de réussite au premier essai sur des blocs jamais vus est la donnée la plus prédictive de ta performance au TBA. Un bloc raté au premier essai en salle, c'est un bloc où tu es éliminé le 14 novembre.",[
+      FLASH_SOURCES,
+      {id:'a1',l:'8 blocs neufs ou reconstruits, un seul essai chacun, 6c à 7b',d:"Tu ne repasses jamais sur un bloc raté aujourd'hui. Lecture depuis le sol, un essai, puis au suivant. Le mardi a déjà mangé une partie du stock de nouveauté de la semaine, donc ici tu piocheras surtout dans les blocs posés par ton binôme et les blocs modifiés.",tr:'n'},
+      {id:'a2',l:'Note ton taux de flash',d:"Sur le nombre tenté. C'est ta vraie métrique de progression pour la compétition, bien plus que les kilos au Tindeq.",tr:'n'},
+      {id:'a3',l:'Lecture chronométrée à 3 minutes',d:"À partir de la semaine 4 : trois minutes de lecture maximum avant l'essai, chrono lancé. Au TBA tu liras pendant que l'équipe précédente grimpe, et tu n'auras pas plus."}]),
+      D('Blocs limites',"Le complément de la séance lourde du lundi. Tu convertis la force en niveau réel.",[
+      {id:'a4',l:'3 blocs à ta limite, 5 à 6 essais chacun',d:"Du 7b au 7c. 4 à 5 min de repos entre chaque essai, montre en main. Un essai fatigué ne sert à rien, il fait juste du dégât aux doigts.",tr:'n'},
+      {id:'a5',l:'Genou : attention aux talons et drop knees appuyés',d:"Un talon crocheté à fond peut réveiller ton syndrome fémoro-patellaire. Tu peux les faire, tu charges progressivement, et tu notes la réaction le soir même.",tr:'txt'}])]};
+    if(p===3) return {title:'Salle : entretien, veille de simulation',dur:'60 min',blocks:[WU_SALLE,slabBlock(w),
+      D('Séance courte',"Simulation demain. Aujourd'hui tu bouges, tu ne t'entraînes pas. La tentation sera de faire une vraie séance, résiste.",[
+      {id:'a1',l:'12 à 14 blocs faciles, 6a à 6c',d:"Du mouvement fluide, zéro échec, zéro essai répété. Tu sors de la salle en ayant l'impression de ne rien avoir fait.",tr:'n'},
+      {id:'a2',l:'Répartir les styles avec ton binôme',d:"Décidez à l'avance qui attaque quoi : dalle technique, dévers puissant, coordination, compression. Cette décision doit être automatique demain, pas discutée pendant les quatre minutes.",tr:'txt'}])]};
+    if(w===8) return {title:'Salle : flash léger',dur:'65 min',blocks:[WU_SALLE,slabBlock(w),
+      D('Affûtage',"Le volume est divisé par deux et l'intensité plafonne. Tu entretiens la sensation de lecture rapide sans créer de fatigue.",[
+      {id:'a1',l:'8 blocs, format flash, 6b à 7a',d:"Neufs si tu en as, sinon des blocs connus mais faciles. Cette semaine peu importe la nouveauté : tu veux repartir avec sept ou huit réussites, pas avec un projet en tête.",tr:'n'},
+      {id:'a2',l:'Aucun bloc au-dessus de 7a, aucune exception',d:"Il n'y a plus rien à gagner et tout à perdre. Un doigt tiré cette semaine, c'est neuf semaines de préparation à la poubelle."}])]};
+    return {title:'Repos total',dur:'',type:'off',blocks:[
+      D('Veille de compétition',"Vendredi 13 novembre. Tu ne touches pas un mur, tu ne touches pas le Tindeq.",[
+      {id:'a1',l:'Préparer le sac ce soir',d:"Chaussons, magnésie, brosse, deux t-shirts, tape, de quoi manger sur dix heures, une bouteille d'eau et une gourde de rechange. Le sac fait ce soir, c'est une chose de moins demain matin."},
+      {id:'a2',l:'Relire la stratégie avec ton binôme',d:"Qui attaque quel style, comment vous vous parlez pendant les quatre minutes, à quel moment vous basculez. Dix minutes au téléphone suffisent."},
+      {id:'a3',l:'Se coucher tôt',d:"Le sommeil de l'avant-veille compte autant que celui de la veille, mais celui de la veille ne se rattrape pas."}])]};
+  }
+  /* dimanche */
+  if(p===1) return {title:'Salle : styles faibles et coordination',dur:'85 min',blocks:[WU_SALLE,
+    D('Corps de séance',"Séance à faible charge pour les doigts et forte charge pour la tête. C'est ici que tu rattrapes ce que le dévers ne t'a jamais appris, et c'est exactement ce que les ouvreurs de Climbing District vont te servir.",[
+    {id:'a1',l:'15 à 18 blocs, dont au moins 8 en dalle et vertical',d:"Du 6b au 7a. Volumes, slopers, coordination, appuis de pied douteux. Presque zéro charge pour tes poulies, donc tu peux en faire beaucoup.",tr:'n'},
+    {id:'a2',l:'5 blocs en pieds imposés',d:"Tu refais un bloc facile en t'interdisant la moitié des prises de pieds. Exercice brutal pour la lecture et le placement du bassin."},
+    {id:'a3',l:'6 blocs en dévers, faciles',d:"Pour ne pas perdre le contact avec le format qui te va bien."}])]};
+  if(p===2){
+    const nb=w===3?12:w===4?16:20;
+    return {title:'Salle : circuit chronométré',dur:'90 min',blocks:[WU_SALLE,
+    D('Circuit au format TBA',"La séance spécifique de la semaine. Elle reproduit la contrainte qui élimine les gens : l'absence totale de repos entre deux blocs validés.",[
+    TBA_RULES,
+    {id:'a1',l:`${nb} blocs enchaînés, 4 minutes chacun, difficulté croissante`,d:"Tu topes, tu descends, tu passes au bloc suivant. Aucune pause pour reprendre ton souffle, aucune discussion. C'est ce détail qui fait exploser les gens sur le douzième bloc alors qu'ils auraient sorti le dix-huitième à froid. Commence en 6b et finis sur le plus dur que tu tiennes.",tr:'n',timer:'bloc4'},
+    {id:'a0',l:'Au moins 4 dalles dans le circuit, dont une dans les cinq derniers blocs',d:"Sinon tu vas composer un circuit de dévers, parce que c'est ce que tu aimes, et tu t'entraîneras à être bon là où tu l'es déjà. Une dalle en fin de circuit, avant-bras cuits et cardio en vrac, c'est le scénario exact du 14 novembre."},
+    {id:'a2',l:'Où tu craques',d:"Note le numéro du bloc où ça part, et surtout pourquoi : avant-bras cuits, cardio, lecture trop lente, ou style qui ne passe pas. Les quatre problèmes ne se corrigent pas de la même façon.",tr:'txt'},
+    {id:'a3',l:'Si tu finis le circuit, tu montes la difficulté de départ',d:"Pas le nombre de blocs. La difficulté croissante est ce qui reproduit le format, pas le volume brut."}]),
+    D('Fin de séance',"",[
+    {id:'a4',l:'6 blocs faciles en redescente',d:"Du 6a, pour finir en mouvement et évacuer."}])]};
+  }
+  if(p===3) return {title:'Salle : récupération active',dur:'45 min',type:'mob',blocks:[
+    D('Lendemain de simulation',"Tu as vidé le réservoir hier. Aujourd'hui c'est du mouvement doux, ou rien du tout si tu es cassé.",[
+    {id:'a1',l:'10 blocs faciles, 6a à 6b',d:"Ou une marche de 40 minutes si les avant-bras ne suivent pas. Les deux options se valent.",tr:'n'},
+    {id:'a2',l:'Débrief de la simulation avec ton binôme',d:"À froid, mais pas trop tard. Trois questions : à quel bloc vous vous êtes arrêtés, quel style vous a coûté le plus cher, et quelle décision vous avez mis trop longtemps à prendre.",tr:'txt'},
+    {id:'a3',l:'Étirements et mobilité 15 min',d:"Avant-bras, épaules, hanches. Plus le genou comme tous les jours."}])]};
+  if(w===8) return {title:'Repos',dur:'',type:'off',blocks:[
+    D('Affûtage',"Dimanche off complet. Une semaine avant la compétition, le repos est un entraînement.",[
+    {id:'a1',l:'Mobilité douce si tu en as envie',d:"Douze minutes, pas plus. Si tu n'as pas envie, tu ne fais rien et c'est très bien."}])]};
+  return {title:'Récupération post-TBA',dur:'40 min',type:'mob',blocks:[
+    D('Le lendemain',"Dimanche 15 novembre. Marche, étirements, et tu notes tout pendant que c'est encore frais.",[
+    {id:'a1',l:'Marche 40 min et étirements',d:"Rien d'autre. Les avant-bras et les doigts ont besoin de trois à quatre jours pleins après une journée pareille."},
+    {id:'a2',l:'Bilan à chaud',d:"Combien de blocs, où vous vous êtes arrêtés, ce qui a marché, ce qui a manqué. Écris-le maintenant, dans deux semaines tu auras réécrit l'histoire.",tr:'txt'},
+    {id:'a3',l:'Et après',d:"Le projet 8a sur Kilter revient sur la table en décembre, quand tu auras accès à la planche. La force construite cet automne ne se perd pas en deux semaines de coupure."}])]};
+}
+</script>
+<script>
+/* ============ ÉTAT ============ */
+const KEY='projet8a.v1';
+const DEF={start:'2026-09-14',bw:70,mvcL:0,mvcR:0,mvc15:0,kneeOffset:2,stage:false,stageFrom:17,tests:[],log:{},theme:'auto'};
+let S=Object.assign({},DEF);
+async function loadState(){
+  try{const r=localStorage.getItem(KEY); if(r) S=Object.assign({},DEF,JSON.parse(r));}catch(e){}
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
+function weekOf(d){const s=parse(S.start);const diff=Math.floor((d-s)/864e5);return Math.floor(diff/7)+1}
+function dowOf(d){return (d.getDay()+6)%7}
+function entry(k){return S.log[k]||(S.log[k]={done:{},vals:{},rpe:null,pain:null,note:'',fin:false})}
+const fmtDate=d=>d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+
+/* MVC helpers */
+const mvcMax=()=>Math.max(S.mvcL||0,S.mvcR||0);
+const daysToTBA=()=>Math.round((parse(TBA.d)-today())/864e5);
+function pct(p){const m=mvcMax();return m?`<b class="mono">${(m*p/100).toFixed(1)} kg</b>`:`<b>${p} % du MVC</b> (fais le test de la semaine 1 pour avoir la valeur en kg)`}
+function pct15(p){const m=S.mvc15||0;return m?`<b class="mono">${(m*p/100).toFixed(1)} kg</b>`:`<b>${p} % du MVC 15 mm</b> (renseigne-la dans les réglages)`}
+const fillP=t=>t.replace(/\{P(\d+)\}/g,(_,p)=>pct(+p)).replace(/\{Q(\d+)\}/g,(_,p)=>pct15(+p));
+
+/* ============ CONSTRUCTION DU JOUR ============ */
+function kneeSession(w){
+  if(w<1) return null;
+  const rw=w+(S.kneeOffset||0);
+  if(rw<=6) return KNEE_REEDUC[rw-1];
+  if(rw<=12) return KNEE_RENFO[rw-7];
+  return KNEE_MAINT;
+}
+function buildDay(w,d){
+  if(w===0&&(d===5||d===6)) return baselineDay(d);
+  if(w<1){const s=buildDay(1,d);s.preview=true;return s}
+  if(w>NW) return {title:'Cycle terminé',dur:'',type:'off',sub:"Le TBA est passé. Refais le test Tindeq, compare avec les mesures du 12 septembre, et relance un cycle depuis les réglages. Le projet 8a sur Kilter revient sur la table dès que tu as accès à la planche.",blocks:[]};
+  const kn=kneeSession(w), knDays=w<=12?[0,2,4]:[0,4];
+  const addKnee=(bl)=>{
+    if(kn&&knDays.includes(d)) bl.push({name:kn.t,goal:kn.note+' '+KNEE_RULES,items:kn.ex.map(e=>({...e}))});
+    return bl;
+  };
+  let s;
+  if(d===0){
+    const bl=[{name:WU_MAISON.name,items:WU_MAISON.items}];
+    if(w===1) bl.push(TINDEQ_SETUP);
+    bl.push(fingerBlock(w,0),UPPER_PULL);
+    s={title:'Maison : doigts lourds et tirage',dur:'75 min',type:'finger',blocks:bl};
+    addKnee(s.blocks);
+  } else if(isContestDay(w,d)){
+    s=contestDay();
+  } else if(isTbaDay(w,d)){
+    s={title:'Team Boulder Arena 5',dur:'la journée',type:'climb',blocks:tbaDay().blocks};
+  } else if(isSimDay(w,d)){
+    const sim=simSession(w);
+    s={title:sim.title,dur:sim.dur,type:'climb',blocks:sim.blocks};
+    s.blocks.push(pinchBlock(w));
+  } else if(d===2&&w===NW){
+    s={title:'Salle : dernier contact',dur:'35 min',type:'climb',blocks:[
+      {name:WU_SALLE.name,items:WU_SALLE.items.slice(0,4)},
+      {name:'Cinq à huit blocs faciles',goal:"Mercredi 11 novembre. Trente minutes de mur, rien de plus. Tu entretiens la sensation de prise et de lecture, tu ne cherches strictement aucune difficulté.",items:[
+        {id:'z1',l:'5 à 8 blocs entre 6a et 6c',d:"Fluide, aucun échec, aucun essai répété. Tu sors en te disant que tu aurais pu en faire trente. C'est le but.",tr:'n'},
+        {id:'z2',l:'Toucher deux ou trois styles différents',d:"Une dalle, un dévers, un truc en volumes. Juste pour que rien ne soit une surprise samedi."},
+        {id:'z3',l:'Zéro bloc au-dessus de 6c',d:"Il reste trois jours. Rien de ce que tu ferais aujourd'hui ne peut te rendre plus fort samedi."}
+      ]}
+    ]};
+  } else if(d===2){
+    s={title:'Maison : capacité et prévention',dur:'60 min',type:'finger',blocks:[
+      {name:WU_MAISON.name,items:WU_MAISON.items},
+      fingerBlock(w,2),
+      UPPER_PREV
+    ]};
+    addKnee(s.blocks);
+  } else if(d===4||d===6){
+    const c=climbSession(w,d===4?5:7);
+    s={title:c.title,dur:c.dur,type:'climb',blocks:c.blocks.map(b=>({name:b.name,goal:b.goal,items:b.items}))};
+    s.blocks.push(pinchBlock(w));
+    addKnee(s.blocks);
+  } else if(d===1){
+    s=tuesSession(w);
+  } else if(d===3){
+    s={title:'Marche active et mobilité',dur:'50 min',type:'run',blocks:[
+      runBlock(w),
+      {name:MOB_ECART.name,items:MOB_ECART.items},
+      {name:KNEE_MOB.name,items:KNEE_MOB.items}
+    ]};
+  } else {
+    s={title:'Repos',dur:'15 min',type:'off',sub:"Jour off complet, la veille de ta séance de Kilter. La progression se fait pendant la récupération, pas pendant la séance.",blocks:[
+      {name:MOB_QUOT.name,goal:"Version optionnelle et douce. Si tu es cassé, tu ne fais rien du tout, c'est un choix parfaitement valable.",items:MOB_QUOT.items},
+      {name:KNEE_MOB.name,goal:"Celle-ci par contre tu la fais tous les jours, y compris aujourd'hui. Elle ne fatigue rien et c'est elle qui règle ton SFP sur la durée.",items:KNEE_MOB.items}
+    ]};
+  }
+  s.blocks.forEach((b,i)=>b.items.forEach((x,j)=>x.uid=`w${w}d${d}b${i}i${j}`));
+  s.key=`w${w}d${d}`;
+  return s;
+}
+function dayLabel(w,d){const s=buildDay(w,d);return s}
+
+/* ============ RENDU ============ */
+let tab='jour', cursor=today(), weekView=null;
+const $=q=>document.querySelector(q);
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+const ICONS={
+ jour:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 11h18"/><path d="M9 16l2 2 4-4"/></svg>',
+ semaine:'<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/><circle cx="19" cy="18" r="2"/></svg>',
+ force:'<svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 3 5-8 4 5"/><path d="M3 21h18"/></svg>',
+ reglages:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>'};
+const CHECK='<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+
+function renderNav(){
+  $('#nav').innerHTML=['jour','semaine','force','reglages'].map(t=>
+    `<button data-tab="${t}" class="${tab===t?'on':''}">${ICONS[t]}${t==='reglages'?'Réglages':t}</button>`).join('');
+}
+function renderHeader(){
+  const w=weekOf(cursor),ph=phaseOf(Math.min(NW,Math.max(1,w)));
+  const jt=daysToTBA();
+  const cd=jt>0?`J-${jt}`:jt===0?"C'est aujourd'hui":'TBA passé';
+  $('#hmeta').textContent = w>=1&&w<=NW ? `S${w} / ${NW} · Bloc ${ph.n} · ${cd}` : `Hors cycle · ${cd}`;
+  $('#htrack').innerHTML=Array.from({length:NW},(_,i)=>{const n=i+1;
+    return `<i class="${n<w?'p':''}${n===w?' cur':''}"></i>`}).join('');
+}
+
+function exHTML(x,e){
+  const done=!!e.done[x.uid], open=OPEN.has(x.uid);
+  let extra='';
+  if(x.tr==='kg') extra=`<div class="inl"><input inputmode="decimal" placeholder="kg" data-v="${x.uid}" value="${esc(e.vals[x.uid]||'')}"><span class="unit">charge utilisée</span></div>`;
+  if(x.tr==='n') extra=`<div class="inl"><input inputmode="numeric" placeholder="nb" data-v="${x.uid}" value="${esc(e.vals[x.uid]||'')}"><span class="unit">blocs / essais réussis</span></div>`;
+  if(x.tr==='txt') extra=`<div class="inl"><input style="width:100%" placeholder="note" data-v="${x.uid}" value="${esc(e.vals[x.uid]||'')}"></div>`;
+  if(x.tr==='mvc') extra=`<div class="inl"><input inputmode="decimal" placeholder="G kg" data-mvc="L" value="${S.mvcL||''}"><input inputmode="decimal" placeholder="D kg" data-mvc="R" value="${S.mvcR||''}"><button class="mini" data-savemvc="1">Enregistrer le test</button></div>`;
+  if(x.tr==='m15') extra=`<div class="inl"><input inputmode="decimal" placeholder="kg" data-m15="1" value="${S.mvc15||''}"><span class="unit">MVC 15 mm, enregistrée dans les réglages</span></div>`;
+  if(x.tr==='cf') extra=`<div class="inl"><input inputmode="decimal" placeholder="CF kg" data-v="${x.uid}" value="${esc(e.vals[x.uid]||'')}"><span class="unit">critical force</span></div>`;
+  const tm=x.timer?`<button class="mini" data-timer="${x.timer}" style="margin-top:8px">Lancer le chrono</button>`:'';
+  return `<div class="ex ${done?'done':''} ${open?'open':''}">
+    <button class="chk" data-chk="${x.uid}" aria-label="Cocher">${CHECK}</button>
+    <div class="exb">
+      <button class="exl" data-open="${x.uid}">${esc(x.l)}</button>
+      ${x.d?`<div class="exd">${fillP(esc(x.d))}</div>`:''}
+      ${!open&&x.d?`<button class="exi" data-open="${x.uid}">Détails</button>`:''}
+      ${extra}${tm}
+    </div></div>`;
+}
+const OPEN=new Set();
+
+function viewJour(){
+  const w=weekOf(cursor),d=dowOf(cursor),s=buildDay(w,d),e=entry(s.key+'-'+iso(cursor));
+  const ph=(w>=1&&w<=NW)?phaseOf(w):null;
+  const tot=s.blocks.reduce((a,b)=>a+b.items.length,0);
+  const nd=s.blocks.reduce((a,b)=>a+b.items.filter(x=>e.done[x.uid]).length,0);
+  let h=`<div class="pill">
+    <button data-go="-1">Hier</button><button data-go="0" class="on">${iso(cursor)===iso(today())?"Aujourd'hui":fmtDate(cursor)}</button><button data-go="1">Demain</button></div>`;
+  if(ph) h+=`<div class="card phasebox"><h3>Bloc ${ph.n} · ${ph.name}</h3><p>${ph.goal}</p></div>`;
+  if(s.preview) h+=`<div class="warnbox"><b>Avant-première</b>Le cycle démarre le ${parse(S.start).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}. Ce que tu vois est la séance correspondante de la semaine 1 : tu peux la parcourir, rien n'est comptabilisé. Change la date de début dans les réglages si tu veux commencer plus tôt.</div>`;
+  else if(S.stage&&w>=(S.stageFrom||17)) h+=`<div class="warnbox"><b>Mode stage actif</b>Semaine compressée à 4 séances, environ 4 h. Les deux séances de planche sont les piliers : si quelque chose doit sauter dans la semaine, ce n'est jamais l'une des deux, et ce n'est jamais l'échauffement.</div>`;
+  else if(isDeload(w)) h+=`<div class="warnbox"><b>Semaine d'affûtage</b>Volume divisé par deux, plus rien de lourd, aucun nouveau stimulus. Il n'y a plus rien à gagner et tout à perdre. La seule chose que tu construis cette semaine, c'est de la fraîcheur.</div>`;
+  if(isContestDay(w,d)) h+=`<div class="warnbox"><b>Contest</b>Il remplace le circuit chronométré du dimanche. À 41 jours du TBA tu n'as rien à ménager : tu y vas à fond et tu ramènes des données.</div>`;
+  if(isSimDay(w,d)) h+=`<div class="warnbox"><b>Simulation complète</b>Journée longue au format TBA, avec ton binôme. Les données que tu ramènes de cette journée valent plus que n'importe quelle séance de force du mois passé.</div>`;
+  if(isTbaDay(w,d)) h+=`<div class="warnbox"><b>${TBA.name}</b>${TBA.lieu}. Plus rien à construire aujourd'hui, tout est déjà fait. Bonne compét.</div>`;
+  else if(w>=1&&w<=NW){const jt=daysToTBA(); if(jt>0&&jt<=21) h+=`<div class="warnbox"><b>J-${jt} avant le TBA</b>${TBA.lieu}, samedi 14 novembre.</div>`;}
+  h+=`<div class="card"><div class="shead">
+      <div class="srow"><span class="tag acc"><i class="dot"></i>${DAYS[d]}</span>${s.dur?`<span class="tag mono">${s.dur}</span>`:''}<span class="tag ${nd===tot&&tot?'ok':''}">${nd}/${tot}</span></div>
+      <div class="stitle">${esc(s.title)}</div>
+      ${s.sub?`<p class="sgoal">${esc(s.sub)}</p>`:''}</div>`;
+  s.blocks.forEach(b=>{
+    h+=`<div class="blk"><div class="blkh"><span>${esc(b.name)}</span></div>`;
+    if(b.goal) h+=`<p class="note" style="padding-top:2px">${esc(b.goal)}</p>`;
+    h+=b.items.map(x=>exHTML(x,e)).join('')+`</div>`;
+  });
+  h+=`</div>`;
+  if(tot){
+    h+=`<div class="card pad">
+      <label style="font-size:13px;font-weight:600">Ressenti de la séance (RPE) <b class="mono" id="rpev">${e.rpe??'-'}</b>/10</label>
+      <input type="range" class="slider" min="1" max="10" value="${e.rpe||6}" id="rpe">
+      <label style="font-size:13px;font-weight:600;display:block;margin-top:14px">Douleur doigts / genou <b class="mono" id="painv">${e.pain??'-'}</b>/10</label>
+      <input type="range" class="slider" min="0" max="10" value="${e.pain||0}" id="pain">
+      <p class="note" style="padding:8px 0 0">Doigts au-dessus de 2 : tu sautes la prochaine séance de poutre. Genou au-dessus de 4 : tu redescends d'une semaine sur le protocole.</p>
+      <textarea id="note" placeholder="Notes libres : ce qui a marché, les blocs, les sensations" style="width:100%;min-height:70px;margin-top:8px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:14px">${esc(e.note||'')}</textarea>
+      <button class="btn ${e.fin?'done':''}" id="fin">${e.fin?'Séance validée':'Valider la séance'}</button></div>`;
+  }
+  return h;
+}
+</script>
+<script>
+const TYPECOL={climb:'var(--accent)',finger:'var(--data2)',mob:'var(--data)',run:'var(--warn)',off:'var(--border)'};
+function mondayOf(d){const x=new Date(d);x.setDate(x.getDate()-dowOf(x));x.setHours(0,0,0,0);return x}
+
+function viewSemaine(){
+  const base=weekView||mondayOf(cursor), w=weekOf(base);
+  const ph=(w>=1&&w<=NW)?phaseOf(w):null;
+  let h=`<div class="pill"><button data-wk="-1">Semaine précédente</button><button class="on">${w>=1&&w<=16?`Semaine ${w}`:'Hors cycle'}</button><button data-wk="1">Suivante</button></div>`;
+  if(ph) h+=`<div class="card phasebox"><h3>Bloc ${ph.n} · ${ph.name}</h3><p>${ph.goal}</p></div>`;
+  h+=`<div class="card">`;
+  for(let i=0;i<7;i++){
+    const dt=new Date(base);dt.setDate(dt.getDate()+i);
+    const s=buildDay(weekOf(dt),i), k=s.key+'-'+iso(dt), e=S.log[k];
+    const items=s.blocks.flatMap(b=>b.items);
+    const tot=items.length;
+    const nd=e?items.filter(x=>e.done[x.uid]).length:0;
+    const isT=iso(dt)===iso(today());
+    const wid='wk'+iso(dt);
+    const wopen=OPEN.has(wid);
+    h+=`<div class="day ${isT?'today':''}">
+      <div class="stripe" style="background:${TYPECOL[s.type]}"></div>
+      <div class="dnum"><b class="mono">${dt.getDate()}</b><s>${DSH[i]}</s></div>
+      <div class="dbody">
+        <button data-open="${wid}" style="text-align:left;width:100%">
+          <b>${esc(s.title)}</b><span>${s.dur||'repos'}${tot?` · ${nd}/${tot}`:''}${e&&e.fin?' · validée':''}</span>
+        </button>
+        ${wopen&&tot?`<div style="margin-top:8px;display:flex;flex-direction:column;gap:5px">${items.map(x=>{
+          const done=!!(e&&e.done[x.uid]);
+          return `<button data-chk="${x.uid}" data-wkchk="${s.key}-${iso(dt)}" style="display:flex;align-items:center;gap:8px;text-align:left">
+            <span class="chk" style="flex:0 0 18px;height:18px;${done?`background:var(--ok);border-color:var(--ok)`:''}">${done?`<svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--surface);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>`:''}</span>
+            <span style="font-size:13px;${done?'color:var(--dim);text-decoration:line-through':''}">${esc(x.l)}</span>
+          </button>`}).join('')}</div>`:''}
+        ${wopen&&!tot?`<div style="margin-top:6px;font-size:13px;color:var(--dim)">Journée de repos, rien de coché à faire.</div>`:''}
+        <button data-day="${iso(dt)}" style="font-size:12px;color:var(--accent);font-weight:600;margin-top:6px">Ouvrir la séance complète</button>
+      </div>
+      ${e&&e.fin?'<span class="tag ok"><i class="dot"></i></span>':''}
+    </div>`;
+  }
+  h+=`</div><p class="note" style="padding:12px 4px">Touche un jour pour voir les exercices, coche-les directement ici ou ouvre la séance complète pour les détails.</p>`;
+  h+=`<h2>Structure de la semaine</h2><div class="card pad"><p class="sgoal" style="margin:0">
+    Deux séances en salle seulement : vendredi pour la dalle puis la difficulté, dimanche pour le volume et le dévers. Le travail de pince se fait sur les disques de la salle, en fin des deux séances, dix à quinze minutes : il fatigue l'adducteur du pouce et pas les fléchisseurs, donc il ne compromet rien. Le bloc de dalle est toujours en tête de la séance du vendredi, à froid, parce que la précision disparaît avec la fatigue et qu'il ne coûte presque rien à tes doigts. Tout le travail de doigts se fait chez toi au Tindeq, lundi pour la force lourde et mercredi pour la capacité, sans jamais te suspendre. Les doigts passent toujours en premier dans la semaine et à froid, jamais après une séance de salle. Le renfo genou se greffe sur lundi, mercredi et vendredi comme ton kiné l'a prévu. Le mardi est une troisième séance de salle jusqu'à la semaine 5 : volume à vue et 4x4, léger pour les doigts et lourd pour le cardio, il ne mange donc pas sur la séance lourde du lundi. Il redevient de la mobilité pendant les semaines de simulation et d'affûtage. Le jeudi reste de la marche active, la course est sortie de ce cycle. Samedi est off, sauf les 24 et 31 octobre qui sont les deux simulations complètes, et le 14 novembre qui est la compétition.</p></div>`;
+  return h;
+}
+
+/* ---- graphiques ---- */
+function lineChart(id,series,labels){
+  const c=document.getElementById(id); if(!c) return;
+  const dpr=window.devicePixelRatio||1, W=c.clientWidth, H=190;
+  c.width=W*dpr; c.height=H*dpr; c.style.height=H+'px';
+  const x=c.getContext('2d'); x.scale(dpr,dpr);
+  const cs=getComputedStyle(document.body);
+  const col=n=>cs.getPropertyValue(n).trim();
+  const all=series.flatMap(s=>s.pts).filter(v=>v!=null);
+  if(!all.length){x.fillStyle=col('--faint');x.font='13px Archivo';x.textAlign='center';
+    x.fillText('Pas encore de données',W/2,H/2);return}
+  const mx=Math.max(...all)*1.12, mn=Math.min(0,Math.min(...all));
+  const P={l:34,r:12,t:14,b:24}, iw=W-P.l-P.r, ih=H-P.t-P.b;
+  const n=Math.max(2,labels.length);
+  const px=i=>P.l+iw*(n===1?0.5:i/(n-1)), py=v=>P.t+ih-(v-mn)/(mx-mn)*ih;
+  x.strokeStyle=col('--border');x.lineWidth=1;x.font='10px "JetBrains Mono"';x.fillStyle=col('--faint');
+  for(let i=0;i<=3;i++){const v=mn+(mx-mn)*i/3,y=py(v);
+    x.beginPath();x.moveTo(P.l,y);x.lineTo(W-P.r,y);x.stroke();
+    x.textAlign='right';x.fillText(v.toFixed(0),P.l-6,y+3)}
+  x.textAlign='center';labels.forEach((L,i)=>x.fillText(L,px(i),H-7));
+  series.forEach(s=>{
+    const pts=s.pts.map((v,i)=>v==null?null:[px(i),py(v)]).filter(Boolean);
+    if(!pts.length)return;
+    x.strokeStyle=col(s.c);x.lineWidth=2.2;x.lineJoin='round';x.beginPath();
+    pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.stroke();
+    pts.forEach((p,i)=>{x.fillStyle=col(s.c);x.beginPath();
+      x.arc(p[0],p[1],i===pts.length-1?4.5:3,0,7);x.fill();
+      if(i===pts.length-1){x.strokeStyle=col('--surface');x.lineWidth=2;x.stroke()}});
+  });
+}
+function barChart(id,vals){
+  const c=document.getElementById(id); if(!c) return;
+  const dpr=window.devicePixelRatio||1,W=c.clientWidth,H=130;
+  c.width=W*dpr;c.height=H*dpr;c.style.height=H+'px';
+  const x=c.getContext('2d');x.scale(dpr,dpr);
+  const cs=getComputedStyle(document.body),col=n=>cs.getPropertyValue(n).trim();
+  const mx=Math.max(4,...vals), gap=3, bw=(W-gap*(NW-1))/NW, cw=weekOf(today());
+  vals.forEach((v,i)=>{
+    const h=Math.max(2,v/mx*(H-24)), X=i*(bw+gap), Y=H-18-h;
+    x.fillStyle=i+1===cw?col('--accent'):v?col('--data'):col('--surface2');
+    x.beginPath();x.roundRect(X,Y,bw,h,2.5);x.fill();
+  });
+  x.fillStyle=col('--faint');x.font='9px "JetBrains Mono"';x.textAlign='center';
+  [1,3,5,7,9].forEach(n=>x.fillText('S'+n,(n-1)*(bw+gap)+bw/2,H-5));
+}
+
+function viewForce(){
+  const tests=S.tests.slice().sort((a,b)=>a.w-b.w);
+  const labels=tests.map(t=>'S'+t.w);
+  const weeks=Array.from({length:NW},(_,i)=>{
+    let n=0;Object.keys(S.log).forEach(k=>{const m=k.match(/^w(\d+)d\d+-/);if(m&&+m[1]===i+1&&S.log[k].fin)n++});return n});
+  const doneTot=weeks.reduce((a,b)=>a+b,0);
+  const cw=Math.min(NW,Math.max(0,weekOf(today())));
+  const hangs=[];
+  for(let w=1;w<=NW;w++){let best=0;Object.keys(S.log).forEach(k=>{const m=k.match(/^w(\d+)d0-/);
+    if(m&&+m[1]===w)Object.values(S.log[k].vals||{}).forEach(v=>{const f=parseFloat(v);if(f>best&&f<300)best=f})});
+    hangs.push(best||null)}
+  const g=mvcMax();
+  let h=`<div class="card"><div class="stats">
+    <div class="stat"><b class="mono">${doneTot}</b><s>séances validées</s></div>
+    <div class="stat"><b class="mono">${cw}</b><s>semaine en cours</s></div>
+    <div class="stat"><b class="mono">${g?g.toFixed(0):'—'}</b><s>MVC max (kg)</s></div>
+  </div></div>`;
+  h+=`<h2>Force de doigts au Tindeq</h2><div class="card"><canvas id="c1"></canvas>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Main gauche</span>
+    <span><i style="background:var(--data)"></i>Main droite</span>
+    <span><i style="background:var(--data2)"></i>Critical force</span></div></div>
+    <p class="note" style="padding:8px 4px">Mesures le 12 septembre, retests en semaine 3 et 6. Enregistre-les depuis la séance du jour ou depuis les réglages.</p>`;
+  h+=`<h2>Charge max hangs</h2><div class="card"><canvas id="c2"></canvas>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Meilleure charge de la semaine (kg)</span></div></div>`;
+  h+=`<h2>Assiduité sur ${NW} semaines</h2><div class="card" style="padding:14px 14px 4px"><canvas id="c3"></canvas></div>
+    <p class="note" style="padding:8px 4px">Chaque barre est le nombre de séances validées dans la semaine. Vise 4 à 5. Une semaine à 2 de temps en temps n'a aucune importance, trois semaines de suite à 2 en ont beaucoup.</p>`;
+  if(tests.length>1){
+    const f=tests[0],l=tests[tests.length-1];
+    const dg=f.L?((l.L-f.L)/f.L*100):0, dd=f.R?((l.R-f.R)/f.R*100):0;
+    h+=`<div class="warnbox"><b>Progression depuis le premier test</b>Main gauche ${dg>=0?'+':''}${dg.toFixed(1)} %, main droite ${dd>=0?'+':''}${dd.toFixed(1)} %. Sur les cinq semaines de charge utile de ce cycle, entre 6 et 12 % est une bonne trajectoire. Au-delà de 18 %, c'est probablement que ta mesure de départ était sous-estimée par un placement approximatif.</div>`;
+  }
+  setTimeout(()=>{
+    lineChart('c1',[{pts:tests.map(t=>t.L||null),c:'--accent'},{pts:tests.map(t=>t.R||null),c:'--data'},{pts:tests.map(t=>t.CF||null),c:'--data2'}],labels);
+    lineChart('c2',[{pts:hangs,c:'--accent'}],Array.from({length:NW},(_,i)=>i%2===0?'S'+(i+1):''));
+    barChart('c3',weeks);
+  },10);
+  return h;
+}
+
+function viewReglages(){
+  const end=new Date(parse(S.start));end.setDate(end.getDate()+NW*7-1);
+  return `<div class="card phasebox"><h3>${TBA.name}</h3><p>Samedi 14 novembre 2026 · ${TBA.lieu}<br>Mesures le 12 septembre, simulations les samedis 24 et 31 octobre.<br><b class="mono">J-${Math.max(0,daysToTBA())}</b></p></div>
+  <h2>Programme</h2><div class="card">
+    <div class="field"><div><label>Début du cycle</label><div class="sub">Lundi 14 septembre. Fin le ${end.toLocaleDateString('fr-FR')}, le lendemain de la compétition.</div></div>
+      <input type="date" id="start" value="${S.start}"></div>
+    <div class="field"><div><label>Poids de corps</label><div class="sub">Sert au calcul des pourcentages de suspension</div></div>
+      <input inputmode="decimal" id="bw" value="${S.bw}"></div>
+  </div>
+  <h2>Tindeq</h2><div class="card">
+    <div class="field"><div><label>MVC main gauche</label><div class="sub">kg, réglette 20 mm, demi-crimp</div></div><input inputmode="decimal" id="ml" value="${S.mvcL||''}"></div>
+    <div class="field"><div><label>MVC réglette 15 mm</label><div class="sub">kg, meilleure des deux mains. Sert aux séances du mercredi.</div></div><input inputmode="decimal" id="m15" value="${S.mvc15||''}"></div>
+    <div class="field"><div><label>MVC main droite</label><div class="sub">kg</div></div><input inputmode="decimal" id="mr" value="${S.mvcR||''}"></div>
+    <div class="field"><div><label>Critical force</label><div class="sub">Moyenne des 6 dernières répétitions</div></div><input inputmode="decimal" id="mc" value=""></div>
+    <div style="padding:0 16px 16px"><button class="btn" id="addtest">Enregistrer un test daté</button></div>
+  </div>
+  ${S.tests.length?`<div class="card"><div class="blkh"><span>Historique des tests</span></div>${S.tests.slice().sort((a,b)=>b.w-a.w).map(t=>
+    `<div class="field"><div><label>Semaine ${t.w}</label><div class="sub">${t.d}</div></div>
+     <div class="mono" style="font-size:13px;text-align:right">G ${t.L||'—'} · D ${t.R||'—'}<br>CF ${t.CF||'—'}</div></div>`).join('')}</div>`:''}
+  <h2>Chronos rapides</h2><div class="card" style="padding:14px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="mini" data-timer="bloc4">Bloc TBA 4 min</button>
+    <button class="mini" data-timer="hang">Max hangs 5x10s</button>
+    <button class="mini" data-timer="rep">Repeaters 6x6x(7/3)</button>
+    <button class="mini" data-timer="cf">Critical force 24x(7/3)</button>
+    <button class="mini" data-timer="rest3">Repos 3 min</button>
+    <button class="mini" data-timer="rest5">Repos 5 min</button>
+  </div>
+  <h2>Apparence</h2><div class="card"><div class="field"><div><label>Thème</label><div class="sub">Suit ton iPhone par défaut</div></div>
+    <select id="theme"><option value="auto"${S.theme==='auto'?' selected':''}>Auto</option><option value="light"${S.theme==='light'?' selected':''}>Clair</option><option value="dark"${S.theme==='dark'?' selected':''}>Sombre</option></select></div></div>
+  <h2>Données</h2><div class="card pad">
+    <p class="sgoal" style="margin:0 0 4px">Tout est stocké sur ton téléphone, rien ne part ailleurs. Exporte de temps en temps : si tu effaces les données de Safari, l'historique part avec.</p>
+    <button class="btn ghost" id="exp">Exporter mes données</button>
+    <button class="btn ghost" id="imp">Importer une sauvegarde</button>
+    <button class="btn ghost" id="rst" style="color:var(--danger)">Tout effacer</button>
+    <input type="file" id="file" accept="application/json" hidden>
+  </div>
+  <h2>Installer sur l'iPhone</h2><div class="card pad"><p class="sgoal" style="margin:0">
+    Ouvre cette page dans Safari, bouton Partager, puis « Sur l'écran d'accueil ». Elle s'ouvrira en plein écran comme une vraie app, avec ses données.</p></div>
+  <div style="height:20px"></div>`;
+}
+</script>
+<script>
+/* ============ CHRONO ============ */
+const TCFG={
+ hang:{w:10,r:180,reps:5,label:'Max hangs'},
+ rep:{w:7,r:3,reps:6,sets:6,sr:150,label:'Repeaters'},
+ cf:{w:7,r:3,reps:24,label:'Critical force'},
+ rest3:{r:180,reps:0,label:'Repos'},
+ rest5:{r:300,reps:0,label:'Repos'},
+ bloc4:{r:240,reps:0,label:'Bloc — 4 min'}
+};
+let TQ=[],TI=0,TT=0,TId=null,AC=null,WL=null;
+function beep(f,ms){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  const o=AC.createOscillator(),g=AC.createGain();o.connect(g);g.connect(AC.destination);
+  o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(.001,AC.currentTime);
+  g.gain.exponentialRampToValueAtTime(.28,AC.currentTime+.01);
+  g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+ms/1000);
+  o.start();o.stop(AC.currentTime+ms/1000+.02)}catch(e){}}
+function buzz(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+function buildQ(k){
+  const c=TCFG[k],q=[];
+  if(!c.reps){q.push({k:'rest',d:c.r,l:'Repos',s:''});return q}
+  const sets=c.sets||1;
+  for(let s=1;s<=sets;s++){
+    for(let i=1;i<=c.reps;i++){
+      q.push({k:'work',d:c.w,l:'Suspension',s:`${i}/${c.reps}${sets>1?` · série ${s}/${sets}`:''}`});
+      if(i<c.reps||sets===1&&i<c.reps) q.push({k:'rest',d:c.r,l:'Repos',s:`${i}/${c.reps}`});
+      else if(i<c.reps) q.push({k:'rest',d:c.r,l:'Repos',s:`${i}/${c.reps}`});
+    }
+    if(s<sets) q.push({k:'rest',d:c.sr,l:'Repos entre séries',s:`série ${s}/${sets} terminée`});
+  }
+  if(c.reps&&!c.sets){ // insérer repos entre suspensions pour max hangs / cf
+  }
+  return q;
+}
+function startTimer(k){
+  const c=TCFG[k];TQ=[];
+  if(!c.reps){TQ=[{k:'rest',d:c.r,l:'Repos',s:''}]}
+  else{const sets=c.sets||1;
+    for(let s=1;s<=sets;s++){
+      for(let i=1;i<=c.reps;i++){
+        TQ.push({k:'work',d:c.w,l:'Tire',s:`${i} / ${c.reps}${sets>1?`  ·  série ${s}/${sets}`:''}`});
+        if(i<c.reps) TQ.push({k:'rest',d:c.r,l:'Repos',s:`${i} / ${c.reps}`});
+      }
+      if(s<sets) TQ.push({k:'rest',d:c.sr,l:'Repos entre séries',s:`série ${s} terminée`});
+    }}
+  TI=0;$('#timer').classList.add('on');
+  if(navigator.wakeLock)navigator.wakeLock.request('screen').then(w=>WL=w).catch(()=>{});
+  step();
+}
+function step(){
+  clearInterval(TId);
+  if(TI>=TQ.length){stopTimer();beep(880,400);buzz([200,80,200]);return}
+  const s=TQ[TI];TT=s.d;
+  $('#timer').className='on '+s.k;
+  $('#tphase').textContent=s.l;$('#tsub').textContent=s.s;
+  paint();
+  beep(s.k==='work'?880:520,140);buzz(s.k==='work'?[150]:[60]);
+  TId=setInterval(()=>{
+    TT--;paint();
+    if(TT<=3&&TT>0){beep(660,70);buzz([40])}
+    if(TT<=0){clearInterval(TId);TI++;step()}
+  },1000);
+}
+function paint(){
+  const s=TQ[TI];if(!s)return;
+  const m=Math.floor(TT/60),sec=TT%60;
+  $('#tbig').textContent=TT>=60?`${m}:${String(sec).padStart(2,'0')}`:String(TT).padStart(2,'0');
+  const C=2*Math.PI*46,f=TT/s.d;
+  const r=$('#tring');r.style.strokeDasharray=C;r.style.strokeDashoffset=C*(1-f);
+}
+function stopTimer(){clearInterval(TId);$('#timer').classList.remove('on');
+  if(WL){try{WL.release()}catch(e){}WL=null}}
+
+/* ============ RENDU PRINCIPAL ============ */
+function render(){
+  renderHeader();renderNav();
+  $('#view').innerHTML = tab==='jour'?viewJour():tab==='semaine'?viewSemaine():tab==='force'?viewForce():viewReglages();
+  window.scrollTo({top:0});
+}
+function applyTheme(){
+  if(S.theme==='auto')document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme',S.theme);
+}
+
+/* ============ ÉVÉNEMENTS ============ */
+document.addEventListener('click',ev=>{
+  const t=ev.target.closest('[data-tab],[data-chk],[data-open],[data-go],[data-wk],[data-day],[data-timer],[data-savemvc],#fin,#exp,#imp,#rst,#addtest,#tskip,#tstop');
+  if(!t)return;
+  const k=weekOf(cursor)+'d'+dowOf(cursor);
+  if(t.dataset.tab){tab=t.dataset.tab;render();return}
+  if(t.dataset.chk){
+    const e=t.dataset.wkchk?entry(t.dataset.wkchk):entry(buildDay(weekOf(cursor),dowOf(cursor)).key+'-'+iso(cursor));
+    e.done[t.dataset.chk]=!e.done[t.dataset.chk];save();buzz([25]);render();return}
+  if(t.dataset.open){const id=t.dataset.open;OPEN.has(id)?OPEN.delete(id):OPEN.add(id);render();return}
+  if(t.dataset.go){const n=+t.dataset.go;if(n){cursor=new Date(cursor);cursor.setDate(cursor.getDate()+n)}else cursor=today();render();return}
+  if(t.dataset.wk){weekView=mondayOf(weekView||cursor);weekView.setDate(weekView.getDate()+7*+t.dataset.wk);render();return}
+  if(t.dataset.day){cursor=parse(t.dataset.day);tab='jour';render();return}
+  if(t.dataset.timer){startTimer(t.dataset.timer);return}
+  if(t.id==='tskip'){TI++;step();return}
+  if(t.id==='tstop'){stopTimer();return}
+  if(t.dataset.savemvc||t.id==='addtest'){
+    const L=parseFloat((document.querySelector('[data-mvc="L"]')||document.getElementById('ml'))?.value)||0;
+    const R=parseFloat((document.querySelector('[data-mvc="R"]')||document.getElementById('mr'))?.value)||0;
+    const CF=parseFloat(document.getElementById('mc')?.value)||null;
+    if(L)S.mvcL=L; if(R)S.mvcR=R;
+    const w=Math.min(NW,Math.max(1,weekOf(today())));
+    const ex=S.tests.find(x=>x.w===w);
+    const rec={w,d:today().toLocaleDateString('fr-FR'),L:L||null,R:R||null,CF};
+    if(ex)Object.assign(ex,rec);else S.tests.push(rec);
+    save();render();return}
+  if(t.id==='fin'){
+    const s=buildDay(weekOf(cursor),dowOf(cursor)),e=entry(s.key+'-'+iso(cursor));
+    e.fin=!e.fin;
+    if(e.fin){s.blocks.forEach(b=>b.items.forEach(x=>{if(e.done[x.uid]===undefined)e.done[x.uid]=true}))}
+    save();buzz([40,60,40]);render();return}
+  if(t.id==='exp'){exportData();return}
+  if(t.id==='imp'){document.getElementById('file').click();return}
+  if(t.id==='rst'){if(confirm('Tout effacer ? Historique, tests, séances. Irréversible.')){S=Object.assign({},DEF);save();render()}return}
+});
+document.addEventListener('input',ev=>{
+  const el=ev.target;
+  if(el.dataset.v){const s=buildDay(weekOf(cursor),dowOf(cursor)),e=entry(s.key+'-'+iso(cursor));
+    e.vals[el.dataset.v]=el.value;save();return}
+  if(el.id==='rpe'){const s=buildDay(weekOf(cursor),dowOf(cursor));entry(s.key+'-'+iso(cursor)).rpe=+el.value;
+    document.getElementById('rpev').textContent=el.value;save();return}
+  if(el.id==='pain'){const s=buildDay(weekOf(cursor),dowOf(cursor));entry(s.key+'-'+iso(cursor)).pain=+el.value;
+    document.getElementById('painv').textContent=el.value;save();return}
+  if(el.id==='note'){const s=buildDay(weekOf(cursor),dowOf(cursor));entry(s.key+'-'+iso(cursor)).note=el.value;save();return}
+  if(el.id==='bw'){S.bw=parseFloat(el.value)||0;save();return}
+  if(el.id==='ml'){S.mvcL=parseFloat(el.value)||0;save();return}
+  if(el.id==='mr'){S.mvcR=parseFloat(el.value)||0;save();return}
+  if(el.id==='m15'||el.dataset.m15){S.mvc15=parseFloat(el.value)||0;save();return}
+  if(el.id==='sfrom'){S.stageFrom=Math.max(1,Math.min(NW,parseInt(el.value)||17));save();render();return}
+  if(el.id==='koff'){S.kneeOffset=Math.max(0,Math.min(11,parseInt(el.value)||0));save();return}
+});
+document.addEventListener('change',ev=>{
+  if(ev.target.id==='start'){const v=ev.target.value;if(v){const d=parse(v);
+    if(dowOf(d)!==0)alert("Choisis un lundi, le programme est calé sur des semaines qui commencent le lundi.");
+    S.start=v;save();render()}return}
+  if(ev.target.id==='stage'){S.stage=ev.target.value==='1';save();render();return}
+  if(ev.target.id==='theme'){S.theme=ev.target.value;save();applyTheme();render();return}
+  if(ev.target.id==='file'){const f=ev.target.files[0];if(!f)return;
+    const rd=new FileReader();rd.onload=()=>{try{S=Object.assign({},DEF,JSON.parse(rd.result));save();applyTheme();render();alert('Sauvegarde importée.')}
+    catch(e){alert("Fichier illisible. Choisis un export généré par l'app.")}};rd.readAsText(f);return}
+});
+async function exportData(){
+  const data=JSON.stringify(S,null,2);
+  const name=`projet8a-${iso(today())}.json`;
+  try{const dl=await claude.use('downloads');
+    if(dl){await dl.save({filename:name,data});return}}catch(e){}
+  try{const b=new Blob([data],{type:'application/json'}),u=URL.createObjectURL(b);
+    const a=document.createElement('a');a.href=u;a.download=name;a.click();
+    setTimeout(()=>URL.revokeObjectURL(u),2000)}
+  catch(e){prompt('Copie ce texte et garde-le en lieu sûr',data)}
+}
+window.addEventListener('resize',()=>{if(tab==='force')render()});
+(async()=>{
+  await loadState();
+  applyTheme();
+  render();
+})();
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})});
+}
+</script>

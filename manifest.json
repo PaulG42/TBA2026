@@ -1,0 +1,19 @@
+{
+  "name": "Projet 8a",
+  "short_name": "Projet 8a",
+  "description": "Préparation Team Boulder Arena — 9 semaines, doigts, dalle et format compétition",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EBEDEF",
+  "theme_color": "#EBEDEF",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
